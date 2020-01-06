@@ -1,11 +1,12 @@
 import json
 from copy import deepcopy
+from pathlib import Path
 
 import pydicom
 import pytest
 from pydicom.dataset import Dataset
 
-from dicomgenerator.reader import to_json
+from dicomgenerator.importer import to_json, save_as_template, Template
 from tests import RESOURCE_PATH
 
 
@@ -39,3 +40,17 @@ def test_reconstruct(a_dataset):
     # make sure all elements that were included are the same as original
     for data_element in reloaded:
         assert data_element in original
+
+
+def test_template_load_save(a_dataset, tmpdir):
+    output_path = Path(tmpdir) / 'test.json'
+
+    description = 'test_description'
+    save_as_template(dataset=a_dataset, description=description,
+                     output_path=output_path)
+
+    loaded = Template.load(output_path)
+    assert loaded.template == a_dataset
+    assert description == description
+
+
