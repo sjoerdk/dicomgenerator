@@ -1,7 +1,6 @@
 """Functions to create pydicom datasets to look like different types of DICOM
-
-This generates single datasets. For batch generating see generator.py
 """
+
 import json
 import datetime
 import factory
