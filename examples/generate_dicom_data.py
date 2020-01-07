@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pydicom
+
 from dicomgenerator.exporter import export
 from dicomgenerator.factory import CTDatasetFactory
 
@@ -28,4 +30,6 @@ def generate_file_with_specifics(output_path):
 
     print(f"Wrote file to {output_path}")
 
-generate_file_with_specifics(output_path=output_dir / 'dicomfile_m')
+
+# generate_file_with_specifics(output_path=output_dir / 'dicomfile_m')
+generate_some_dicom_files(output_dir)

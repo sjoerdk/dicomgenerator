@@ -5,6 +5,7 @@ import json
 import datetime
 import factory
 import pydicom
+from pydicom.dataset import Dataset
 
 from dicomgenerator.resources import TEMPLATE_PATH
 from dicomgenerator.settings import DICOM_GENERATOR_ROOT_UID
@@ -31,6 +32,9 @@ class DatasetFactory(factory.Factory):
     """Generates a pydicom dataset based on a json-dicom template
 
     """
+    # This bytes preamble is actually required. DICOM is strange. See.
+    # http://dicom.nema.org/dicom/2013/output/chtml/part10/chapter_7.html
+    preamble = b"\0" * 128
 
     class Meta:
         model = pydicom.dataset.Dataset
