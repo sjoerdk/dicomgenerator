@@ -158,3 +158,5 @@ class CTDatasetFactory(DatasetFactory):
     StudyInstanceUID = factory.Faker("dicom_ui")
     SeriesInstanceUID = factory.Faker("dicom_ui")
     FrameOfReferenceUID = factory.Faker("dicom_ui")
+
+    PatientIdentityRemoved = "NO"
