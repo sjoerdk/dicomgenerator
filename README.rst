@@ -7,9 +7,6 @@ dicomgenerator
         :target: https://github.com/sjoerdk/dicomgenerator/actions?query=workflow%3Abuild
         :alt: Build Status
 
-.. image:: https://img.shields.io/travis/sjoerdk/dicomgenerator.svg
-        :target: https://travis-ci.org/sjoerdk/dicomgenerator
-
 
 Create DICOM images for use in testing. Uses pydicom.
 
