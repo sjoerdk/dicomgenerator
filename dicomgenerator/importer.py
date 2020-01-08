@@ -197,6 +197,7 @@ def rescale(ndarray, min, max):
 
     return ndarray.astype(old_dtype)
 
+
 def to_json(dataset):
     """Converts pydicom dataset to JSON.
 

@@ -31,7 +31,7 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="Create DICOM images for use in testing. Can also modify existing images.",
+    description="Create DICOM images for use in testing. Based on pydicom",
     entry_points={
         'console_scripts': [
             'dicomgenerator=dicomgenerator.cli:main',
