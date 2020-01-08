@@ -43,7 +43,7 @@ setup(
     include_package_data=True,
     keywords='dicomgenerator',
     name='dicomgenerator',
-    packages=find_packages(include=['dicomgenerator', 'dicomgenerator.*']),
+    packages=find_packages(include=['dicomgenerator']),
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
