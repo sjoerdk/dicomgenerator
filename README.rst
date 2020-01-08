@@ -4,7 +4,7 @@ dicomgenerator
 
 
 .. image:: https://github.com/DIAGNijmegen/umcnad/workflows/build/badge.svg
-        :target: https://github.com/DIAGNijmegen/umcnad/actions?query=workflow%3Abuild
+        :target: https://github.com/sjoerdk/dicomgenerator/actions?query=workflow%3Abuild
         :alt: Build Status
 
 .. image:: https://img.shields.io/travis/sjoerdk/dicomgenerator.svg
