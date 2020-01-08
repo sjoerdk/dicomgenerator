@@ -3,21 +3,12 @@ dicomgenerator
 ==============
 
 
-.. image:: https://img.shields.io/pypi/v/dicomgenerator.svg
-        :target: https://pypi.python.org/pypi/dicomgenerator
+.. image:: https://github.com/DIAGNijmegen/umcnad/workflows/build/badge.svg
+        :target: https://github.com/DIAGNijmegen/umcnad/actions?query=workflow%3Abuild
+        :alt: Build Status
 
 .. image:: https://img.shields.io/travis/sjoerdk/dicomgenerator.svg
         :target: https://travis-ci.org/sjoerdk/dicomgenerator
-
-.. image:: https://readthedocs.org/projects/dicomgenerator/badge/?version=latest
-        :target: https://dicomgenerator.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
-
-
-.. image:: https://pyup.io/repos/github/sjoerdk/dicomgenerator/shield.svg
-     :target: https://pyup.io/repos/github/sjoerdk/dicomgenerator/
-     :alt: Updates
-
 
 
 Create DICOM images for use in testing. Uses pydicom.
