@@ -3,7 +3,7 @@ dicomgenerator
 ==============
 
 
-.. image:: https://github.com/DIAGNijmegen/umcnad/workflows/build/badge.svg
+.. image:: https://github.com/DIAGNijmegen/dicomgenerator/workflows/build/badge.svg
         :target: https://github.com/sjoerdk/dicomgenerator/actions?query=workflow%3Abuild
         :alt: Build Status
 
