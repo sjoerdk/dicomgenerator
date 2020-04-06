@@ -10,7 +10,7 @@ twine==1.14.0
 pytest==4.6.5
 pytest-runner==5.1
 black==19.10b0
-Pillow==6.2.1
+Pillow==6.2.2
 numpy==1.18.0
 git+git://github.com/pydicom/pydicom.git@6c2b39fb71
 factory-boy==2.12.0
