@@ -18,7 +18,10 @@ Create DICOM images for use in testing. Uses pydicom.
 Features
 --------
 
-* TODO
+* Create templates from any DICOM file
+* Optionally replace image data with dummy data
+* Use pytest to generate arbitrary permutations of any template
+* Includes pytest provider for generating valid DICOM values for person name, time, date, and UID
 
 Installation
 ------------
