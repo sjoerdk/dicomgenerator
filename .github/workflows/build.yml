@@ -28,3 +28,12 @@ jobs:
       run: |
         pip install pytest
         pytest
+    - name: build distribution files
+      run: |
+        python setup.py sdist bdist_wheel
+    - name: pypi-publish
+      if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+      uses: pypa/gh-action-pypi-publish@v1.1.0
+      with:
+        user: __token__
+        password: ${{ secrets.pypi_password }}
