@@ -3,9 +3,13 @@ dicomgenerator
 ==============
 
 
-.. image:: https://github.com/DIAGNijmegen/dicomgenerator/workflows/build/badge.svg
+
+.. image:: https://github.com/sjoerdk/dicomgenerator/workflows/build/badge.svg
         :target: https://github.com/sjoerdk/dicomgenerator/actions?query=workflow%3Abuild
         :alt: Build Status
+
+.. image:: https://img.shields.io/pypi/v/idiscore.svg
+        :target: https://pypi.python.org/pypi/dicomgenerator
 
 
 Create DICOM images for use in testing. Uses pydicom.
