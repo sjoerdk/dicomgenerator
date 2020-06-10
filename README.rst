@@ -26,6 +26,11 @@ Features
 Installation
 ------------
 
+Install with pip::
+
+    pip install dicomgenerator
+
+
 Currently using dev version of pydicom. To install use::
 
    pip install git+ssh://git@github.com/pydicom/pydicom.git

@@ -12,6 +12,6 @@ pytest-runner==5.1
 black==19.10b0
 Pillow==6.2.2
 numpy==1.18.0
-git+git://github.com/pydicom/pydicom.git@6c2b39fb71
+pydicom==2.0.0
 factory-boy==2.12.0
 matplotlib==3.1.2
