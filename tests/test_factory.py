@@ -34,7 +34,8 @@ def test_factory_random(fix_random_seed):
     ('AcquisitionTime', 'TM', '184146.928'),
     ('SeriesInstanceUID', 'UI',
      '1.2.826.0.1.3680043.10.404.1018842105998743551928118404590099790'),
-    ('PatientBirthDate', 'DA', '20121108')
+    ('PatientBirthDate', 'DA', '20121108'),
+    ('Rows', 'US', 41990)
 ])
 def test_data_element_factory_argument(fix_random_seed,
                                        tag,

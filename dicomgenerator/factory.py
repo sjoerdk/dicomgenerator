@@ -207,22 +207,28 @@ class DataElementFactory(factory.Factory):
         DataElementFactoryException
             If a value cannot be generated
         """
-        # Which function in Faker should generate the mock value for each
-        # Value Representation?
-        vr_function_mapping = {
-            VRs.PersonName: "dicom_person_name",
-            VRs.Time: "dicom_time",
-            VRs.Date: "dicom_date",
-            VRs.UniqueIdentifier: "dicom_ui"
-        }
-        vr_obj = VRs.short_name_to_vr(self.VR)
 
-        try:
-            return factory.Faker(vr_function_mapping[vr_obj]).generate({})
-        except KeyError:
+        vr = VRs.short_name_to_vr(self.VR)
+        if vr == VRs.PersonName:
+            return factory.Faker("dicom_person_name").generate({})
+        elif vr == VRs.Time:
+            return factory.Faker("dicom_time").generate({})
+        elif vr == VRs.Date:
+            return factory.Faker("dicom_date").generate({})
+        elif vr == VRs.UniqueIdentifier:
+            return factory.Faker("dicom_ui").generate({})
+        elif vr == VRs.UnsignedShort:
+            return factory.random.randgen.randint(0, 2**16)
+        elif vr == VRs.UnsignedLong:
+            return factory.random.randgen.randint(0, 2**32)
+        elif vr == VRs.ShortText:
+            return factory.Faker('sentence').generate()
+        elif vr == VRs.LongText:
+            return factory.Faker('text').generate()
+        else:
             raise DataElementFactoryException(
                 f"I dont know how to generate a mock value for"
-                f" {vr_obj}, the VR of {self.tag}")
+                f" {vr}, the VR of '{self.tag}'")
 
 
 class DataElementFactoryException(DICOMGeneratorException):
