@@ -28,34 +28,27 @@ def test_factory_random(fix_random_seed):
     assert str(dataset.PatientName) == "van Ooyen^Fiene"
 
 
-def test_data_element_factory(fix_random_seed):
+@pytest.mark.parametrize('tag,expected_vr, expected_value',[
+    ('PatientName', 'PN', 'van Ooyen^Fiene'),
+    (0x00100010, 'PN', 'van Ooyen^Fiene'),
+    ('AcquisitionTime', 'TM', '184146.928'),
+    ('SeriesInstanceUID', 'UI',
+     '1.2.826.0.1.3680043.10.404.1018842105998743551928118404590099790'),
+    ('PatientBirthDate', 'DA', '20121108')
+])
+def test_data_element_factory_argument(fix_random_seed,
+                                       tag,
+                                       expected_vr,
+                                       expected_value):
+    """Try to create a DataElementFactory of several types
+    """
 
-    element = DataElementFactory(tag='PatientName')
-    assert element.VR == 'PN'
-    assert element.value == "van Ooyen^Fiene"
-
-
-def test_data_element_factory_argument(fix_random_seed):
-
-    element = DataElementFactory(tag=0x00100010)
-    assert element.VR == 'PN'
-    assert element.value == "van Ooyen^Fiene"
-
-
-def test_data_element_factory_rest(fix_random_seed):
-
-    element2 = DataElementFactory(tag='AcquisitionTime')
-    assert element2.VR == 'TM'
-    assert element2.value == '184146.928'
-
-    element3 = DataElementFactory(tag='SeriesInstanceUID')
-    assert element3.VR == 'UI'
-    assert element3.value == (
-        '1.2.826.0.1.3680043.10.404.3499455237445106102360603272897163423')
-
-    element4 = DataElementFactory(tag='PatientBirthDate')
-    assert element4.VR == 'DA'
-    assert element4.value == '20120511'
+    element = DataElementFactory(tag=tag)
+    assert element.VR == expected_vr
+    assert element.value == expected_value
 
 
+def test_data_element_factory_exceptions(fix_random_seed):
 
+    with pytest.raises(ValueError):
+        DataElementFactory(tag='unknown_tag')
