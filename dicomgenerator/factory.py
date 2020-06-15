@@ -5,15 +5,20 @@ import json
 import datetime
 import factory
 import pydicom
-from pydicom.dataset import Dataset
+import random
 
+from factory.random import get_random_state
+from pydicom.datadict import dictionary_VR
+from pydicom.tag import Tag
+
+from dicomgenerator.dicom import VR, VRs
+from dicomgenerator.exceptions import DICOMGeneratorException
 from dicomgenerator.resources import TEMPLATE_PATH
 from dicomgenerator.settings import DICOM_GENERATOR_ROOT_UID
 from factory.fuzzy import FuzzyDate
 from faker.providers import BaseProvider
 from faker import Faker
 from pydicom.uid import generate_uid
-from random import randint
 
 
 class FuzzyDICOMDateString(FuzzyDate):
@@ -89,12 +94,12 @@ class DICOMVRProvider(BaseProvider):
         """
         return (
             datetime.time(
-                hour=randint(0, 23),
-                minute=randint(0, 59),
-                second=randint(0, 59),  # DICOM spec says 0-60. serious?
+                hour=factory.random.randgen.randint(0, 23),
+                minute=factory.random.randgen.randint(0, 59),
+                second=factory.random.randgen.randint(0, 59),  # DICOM spec says 0-60?
             ).strftime("%H%M%S")
             + "."
-            + str(randint(100, 999))
+            + str(factory.random.randgen.randint(100, 999))
         )
 
     def dicom_date(self):
@@ -110,14 +115,19 @@ class DICOMVRProvider(BaseProvider):
         return date.strftime("%Y%m%d")
 
     def dicom_ui(self):
-        """Valid DICOM UID (VR = UI)
+        """generate Valid DICOM UID (VR = UI)
+
+        Uses factory boy random seed, so setting seed in test yields the same
+        UID value each time
 
         Returns
         -------
         str
         """
-
-        return str(generate_uid(prefix=DICOM_GENERATOR_ROOT_UID))
+        return str(generate_uid(
+            prefix=DICOM_GENERATOR_ROOT_UID,
+            entropy_srcs=[str(factory.random.randgen.getrandbits(100))]),
+                   )
 
 
 factory.Faker.add_provider(DICOMVRProvider)
@@ -164,3 +174,56 @@ class CTDatasetFactory(DatasetFactory):
     FrameOfReferenceUID = factory.Faker("dicom_ui")
 
     PatientIdentityRemoved = "NO"
+
+
+class DataElementFactory(factory.Factory):
+    """Generates pydicom DataElements.
+
+    Will always match VR and random value to given values
+
+    >>> DataElementFactory(tag='PatientName').vr = 'PN'
+    >>> DataElementFactory(tag='PatientName').value = 'JONES^Sarah'
+
+    You can still set custom values as well:
+    >>> DataElementFactory(tag='PatientName', value='123').value = '123'
+    """
+
+    class Meta:
+        model = pydicom.dataelem.DataElement
+
+    tag = 'PatientName'
+
+    @factory.lazy_attribute
+    def VR(self):
+        """Find the correct Value Representation for this tag from pydicom"""
+        return dictionary_VR(Tag(self.tag))
+
+    @factory.lazy_attribute
+    def value(self):
+        """Generate a valid mock value for this type of VR
+
+        Raises
+        ------
+        DataElementFactoryException
+            If a value cannot be generated
+        """
+        # Which function in Faker should generate the mock value for each
+        # Value Representation?
+        vr_function_mapping = {
+            VRs.PersonName: "dicom_person_name",
+            VRs.Time: "dicom_time",
+            VRs.Date: "dicom_date",
+            VRs.UniqueIdentifier: "dicom_ui"
+        }
+        vr_obj = VRs.short_name_to_vr(self.VR)
+
+        try:
+            return factory.Faker(vr_function_mapping[vr_obj]).generate({})
+        except KeyError:
+            raise DataElementFactoryException(
+                f"I dont know how to generate a mock value for"
+                f" {vr_obj}, the VR of {self.tag}")
+
+
+class DataElementFactoryException(DICOMGeneratorException):
+    pass

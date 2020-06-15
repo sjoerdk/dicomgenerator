@@ -12,7 +12,7 @@ dicomgenerator
     :target: https://pypi.python.org/pypi/dicomgenerator
 
 
-Create DICOM images for use in testing. Uses pydicom.
+Generate pydicom datasets and data elements for use in testing.
 
 
 * Free software: MIT license
@@ -22,10 +22,11 @@ Create DICOM images for use in testing. Uses pydicom.
 Features
 --------
 
+* Generates random valid DICOM values for person name, time, date, and UID
+* Generates (templated) pydicom Datasets and DicomElements
+* leverages Factory Boy to generate arbitrary permutations of any template
 * Create templates from any DICOM file
 * Optionally replace image data with dummy data
-* Use pytest to generate arbitrary permutations of any template
-* Includes pytest provider for generating valid DICOM values for person name, time, date, and UID
 
 Installation
 ------------
@@ -33,11 +34,6 @@ Installation
 Install with pip::
 
     pip install dicomgenerator
-
-
-Currently using dev version of pydicom. To install use::
-
-   pip install git+ssh://git@github.com/pydicom/pydicom.git
 
 
 Credits

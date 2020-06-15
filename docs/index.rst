@@ -1,5 +1,12 @@
 Welcome to dicomgenerator's documentation!
-======================================
+==========================================
+
+
+DICOM generator extends the functionality of the superior `Factory Boy pytest plugin <https://factoryboy.readthedocs.io/>`_ to be
+able to generate arbitrary `pydicom <https://pydicom.github.io/>`_ datasets and data elements.
+
+See the :doc:`usage` for more details
+
 
 .. toctree::
    :maxdepth: 2

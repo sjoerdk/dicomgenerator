@@ -12,7 +12,7 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = ['Pillow==6.2.2', 'numpy==1.18.0',
-                'pydicom>2.0',
+                'pydicom==2.*',
                 'matplotlib==3.1.2', 'factory-boy==2.12.0']
 
 setup_requirements = ['pytest-runner', ]
