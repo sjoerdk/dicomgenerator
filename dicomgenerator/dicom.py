@@ -58,6 +58,15 @@ class VRs:
 
     by_short_name = {x.short_name:x for x in all}
 
+    # VRs which could reasonably have random string contents
+    string_like = [LongString, LongText, PersonName, ShortString, ShortText,
+                   UniqueIdentifier, UnlimitedText]
+
+    # VRs which represent numbers
+    numeric = [DecimalString, FloatingPointDouble, FloatingPointDouble, IntegerString,
+               OtherDoubleString, OtherFloatString, SignedLong, SignedShort,
+               UnsignedShort, UnsignedLong]
+
     @classmethod
     def short_name_to_vr(cls, short_name) -> VR:
         """Find a VR with the given short name
