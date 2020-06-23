@@ -209,27 +209,67 @@ class DataElementFactory(factory.Factory):
         """
 
         vr = VRs.short_name_to_vr(self.VR)
-        if vr == VRs.PersonName:
-            return factory.Faker("dicom_person_name").generate({})
-        elif vr == VRs.Time:
-            return factory.Faker("dicom_time").generate({})
+        if vr == VRs.ApplicationEntity:
+            return "MockEntity"
+        elif vr == VRs.AgeString:
+            return f"{factory.random.randgen.randint(0,120):03d}Y"
+        elif vr == VRs.AttributeTag:
+            return 0x0010, 0x0010
+        elif vr == VRs.CodeString:
+            return "MockCodeString"
         elif vr == VRs.Date:
             return factory.Faker("dicom_date").generate({})
-        elif vr == VRs.UniqueIdentifier:
-            return factory.Faker("dicom_ui").generate({})
-        elif vr == VRs.UnsignedShort:
-            return factory.random.randgen.randint(0, 2**16)
-        elif vr == VRs.UnsignedLong:
-            return factory.random.randgen.randint(0, 2**32)
+        elif vr == VRs.DecimalString:
+            return "+10.4"
+        elif vr == VRs.DateTime:
+            return factory.Faker("dicom_date").generate({}) +\
+                   factory.Faker("dicom_time").generate({})
+        elif vr == VRs.FloatingPointSingle:
+            return 1.1
+        elif vr == VRs.FloatingPointDouble:
+            return 1.123
+        elif vr == VRs.IntegerString:
+            return f"{factory.random.randgen.randint(-2**31,2**31)}"
+        elif vr == VRs.LongString:
+            return factory.Faker('sentence').generate()[:64]
+        elif vr == VRs.LongText:
+            return factory.Faker('text').generate()[:10240]
+        elif vr == VRs.OtherByteString:
+            return b'\x13\00'
+        elif vr == VRs.OtherDoubleString:
+            return "MockDoubleString"
+        elif vr == VRs.OtherFloatString:
+            return "MockFloatString"
+        elif vr == VRs.OtherWordString:
+            return "MockOtherWordString"
+        elif vr == VRs.PersonName:
+            return factory.Faker("dicom_person_name").generate({})
+        elif vr == VRs.ShortString:
+            return "MockShortString"
+        elif vr == VRs.SignedLong:
+            return factory.random.randgen.randint(-2**32, 2**32)
+        elif vr == VRs.Sequence:
+            return []
+        elif vr == VRs.SignedShort:
+            return factory.random.randgen.randint(-2**16, 2**16)
         elif vr == VRs.ShortText:
             return factory.Faker('sentence').generate()
-        elif vr == VRs.LongText:
+        elif vr == VRs.Time:
+            return factory.Faker("dicom_time").generate({})
+        elif vr == VRs.UniqueIdentifier:
+            return factory.Faker("dicom_ui").generate({})
+        elif vr == VRs.UnsignedLong:
+            return factory.random.randgen.randint(0, 2**32)
+        elif vr == VRs.Unknown:
+            return "MockUnknown"
+        elif vr == VRs.UnsignedShort:
+            return factory.random.randgen.randint(0, 2**16)
+        elif vr == VRs.UnlimitedText:
             return factory.Faker('text').generate()
         else:
             raise DataElementFactoryException(
                 f"I dont know how to generate a mock value for"
                 f" {vr}, the VR of '{self.tag}'")
-
 
 class DataElementFactoryException(DICOMGeneratorException):
     pass
