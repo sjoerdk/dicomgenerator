@@ -56,7 +56,7 @@ class VRs:
            Sequence, SignedShort, ShortText, Time, UniqueIdentifier, UnsignedLong,
            Unknown, UnsignedShort, UnlimitedText]
 
-    by_short_name = {x.short_name:x for x in all}
+    by_short_name = {x.short_name: x for x in all}
 
     # VRs which could reasonably have random string contents
     string_like = [LongString, LongText, PersonName, ShortString, ShortText,
@@ -66,6 +66,9 @@ class VRs:
     numeric = [DecimalString, FloatingPointDouble, FloatingPointDouble, IntegerString,
                OtherDoubleString, OtherFloatString, SignedLong, SignedShort,
                UnsignedShort, UnsignedLong]
+
+    # VRs which represent dates and times
+    date_like = [Date, DateTime, Time]
 
     @classmethod
     def short_name_to_vr(cls, short_name) -> VR:

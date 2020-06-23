@@ -222,5 +222,6 @@ def to_json(dataset):
 
     megabyte = 1024 * 1024
     return dataset.to_json(
-        bulk_data_element_handler=just_decode_handler, bulk_data_threshold=megabyte * 3
+        bulk_data_element_handler=just_decode_handler,
+        bulk_data_threshold=megabyte * 3
     )
