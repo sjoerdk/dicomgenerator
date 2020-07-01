@@ -181,23 +181,36 @@ class DataElementFactory(factory.Factory):
 
     Will always match VR and random value to given values
 
-    >>> DataElementFactory(tagname='PatientName').vr = 'PN'
-    >>> DataElementFactory(tagname='PatientName').value = 'JONES^Sarah'
+    >>> DataElementFactory(tag='PatientName').vr = 'PN'
+    >>> DataElementFactory(tag='PatientName').value = 'JONES^Sarah'
 
     You can still set custom values as well:
-    >>> DataElementFactory(tagname='PatientName', value='123').value = '123'
+    >>> DataElementFactory(tag='PatientName', value='123').value = '123'
+
+    Notes
+    -----
+    For an unknown tag without an explicit VR, this factory will assign a
+    LongString (LO) VR:
+    >>> DataElementFactory(tag=('ee011020')).VR = 'LO'
+
+    If this is not what you want, pass an explicit VR:
+    >>> DataElementFactory(tag=('ee011020'), VR='SL', value=-10.2)
     """
 
     class Meta:
         model = pydicom.dataelem.DataElement
-        exclude = ('tagname',)
 
     tag = Tag('PatientID')
 
     @factory.lazy_attribute
     def VR(self):
         """Find the correct Value Representation for this tag from pydicom"""
-        return dictionary_VR(Tag(self.tag))
+        try:
+            return dictionary_VR(Tag(self.tag))
+        except KeyError as e:
+            # unknown tag. Just return set value, assuming user want to just
+            # get on with it
+            return VRs.LongString.short_name
 
     @factory.lazy_attribute
     def value(self):
@@ -271,6 +284,7 @@ class DataElementFactory(factory.Factory):
             raise DataElementFactoryException(
                 f"I dont know how to generate a mock value for"
                 f" {vr}, the VR of '{self.tag}'")
+
 
 class DataElementFactoryException(DICOMGeneratorException):
     pass

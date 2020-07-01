@@ -4,6 +4,7 @@ import pytest
 from pydicom.dataelem import DataElement
 from pydicom.tag import BaseTag, Tag
 
+from dicomgenerator.dicom import VRs
 from dicomgenerator.factory import CTDatasetFactory, DataElementFactory
 from factory import random
 
@@ -32,7 +33,7 @@ def test_factory_random(fix_random_seed):
 
 
 @pytest.mark.parametrize(
-    "tagpwc,expected_vr, expected_value",
+    "tag,expected_vr, expected_value",
     [
         ("PatientName", "PN", "van Ooyen^Fiene"),
         (0x00100010, "PN", "van Ooyen^Fiene"),
@@ -59,12 +60,19 @@ def test_data_element_factory_argument(
 
 
 def test_data_element_factory_init():
-    """factory does slightly iffy casting of string to Tag(). Verify that this works
+    """Check different init methods
     """
+    # factory casts tag init argument to Tag(). Verify that this works.
     assert type(DataElementFactory().tag) == BaseTag
     assert type(DataElement(tag="Modality", VR="SH", value="kees").tag) == BaseTag
     assert type(DataElementFactory(tag="Modality").tag) == BaseTag
     assert type(DataElementFactory(tag=(0x0010, 0x0020)).tag) == BaseTag
+
+    # For unknown tags, just give a default VR. Assuming the default position
+    # for users of DataElementFactory will be 'Don't care, just give me the Element'
+    assert DataElementFactory(tag=(0xee30, 0xf120)).VR == VRs.LongString.short_name
+    assert DataElementFactory.create(
+        tag=(0xee30, 0xf120), value=100).VR == VRs.LongString.short_name
 
 
 def test_data_element_factory_exceptions(fix_random_seed):
