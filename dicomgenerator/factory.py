@@ -181,17 +181,18 @@ class DataElementFactory(factory.Factory):
 
     Will always match VR and random value to given values
 
-    >>> DataElementFactory(tag='PatientName').vr = 'PN'
-    >>> DataElementFactory(tag='PatientName').value = 'JONES^Sarah'
+    >>> DataElementFactory(tagname='PatientName').vr = 'PN'
+    >>> DataElementFactory(tagname='PatientName').value = 'JONES^Sarah'
 
     You can still set custom values as well:
-    >>> DataElementFactory(tag='PatientName', value='123').value = '123'
+    >>> DataElementFactory(tagname='PatientName', value='123').value = '123'
     """
 
     class Meta:
         model = pydicom.dataelem.DataElement
+        exclude = ('tagname',)
 
-    tag = 'PatientName'
+    tag = Tag('PatientID')
 
     @factory.lazy_attribute
     def VR(self):
