@@ -60,7 +60,7 @@ class VRs:
 
     # VRs which could reasonably have random string contents
     string_like = [LongString, LongText, PersonName, ShortString, ShortText,
-                   UniqueIdentifier, UnlimitedText]
+                   UniqueIdentifier, UnlimitedText, CodeString]
 
     # VRs which represent numbers
     numeric = [DecimalString, FloatingPointDouble, FloatingPointDouble, IntegerString,
