@@ -29,14 +29,14 @@ def test_factory_random(fix_random_seed):
     Kind of a meta test as it tests pytest and factory instead of my own code.
     Still, I want to make sure this works"""
     dataset = CTDatasetFactory()
-    assert str(dataset.PatientName) == "van Ooyen^Fiene"
+    assert str(dataset.PatientName) == "Vaessen^Maud"
 
 
 @pytest.mark.parametrize(
     "tag,expected_vr, expected_value",
     [
-        ("PatientName", "PN", "van Ooyen^Fiene"),
-        (0x00100010, "PN", "van Ooyen^Fiene"),
+        ("PatientName", "PN", "Vaessen^Maud"),
+        (0x00100010, "PN", "Vaessen^Maud"),
         ("AcquisitionTime", "TM", "184146.928"),
         (
             "SeriesInstanceUID",

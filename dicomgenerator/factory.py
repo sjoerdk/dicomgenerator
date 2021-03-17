@@ -221,7 +221,8 @@ class DataElementFactory(factory.Factory):
         DataElementFactoryException
             If a value cannot be generated
         """
-
+        faker = Faker()
+        faker.add_provider(DICOMVRProvider)
         vr = VRs.short_name_to_vr(self.VR)
         if vr == VRs.ApplicationEntity:
             return "MockEntity"
@@ -232,12 +233,11 @@ class DataElementFactory(factory.Factory):
         elif vr == VRs.CodeString:
             return "MockCodeString"
         elif vr == VRs.Date:
-            return factory.Faker("dicom_date").generate({})
+            return faker.dicom_date()
         elif vr == VRs.DecimalString:
             return "+10.4"
         elif vr == VRs.DateTime:
-            return factory.Faker("dicom_date").generate({}) +\
-                   factory.Faker("dicom_time").generate({})
+            return faker.dicom_date() + faker.dicom_time()
         elif vr == VRs.FloatingPointSingle:
             return 1.1
         elif vr == VRs.FloatingPointDouble:
@@ -245,9 +245,9 @@ class DataElementFactory(factory.Factory):
         elif vr == VRs.IntegerString:
             return f"{factory.random.randgen.randint(-2**31,2**31)}"
         elif vr == VRs.LongString:
-            return factory.Faker('sentence').generate()[:64]
+            return faker.sentence()[:64]
         elif vr == VRs.LongText:
-            return factory.Faker('text').generate()[:10240]
+            return faker.text()[:10240]
         elif vr == VRs.OtherByteString:
             return b'\x13\00'
         elif vr == VRs.OtherDoubleString:
@@ -257,7 +257,7 @@ class DataElementFactory(factory.Factory):
         elif vr == VRs.OtherWordString:
             return "MockOtherWordString"
         elif vr == VRs.PersonName:
-            return factory.Faker("dicom_person_name").generate({})
+            return faker.dicom_person_name()
         elif vr == VRs.ShortString:
             return "MockShortString"
         elif vr == VRs.SignedLong:
@@ -267,11 +267,11 @@ class DataElementFactory(factory.Factory):
         elif vr == VRs.SignedShort:
             return factory.random.randgen.randint(-2**16, 2**16)
         elif vr == VRs.ShortText:
-            return factory.Faker('sentence').generate()
+            return faker.sentence()
         elif vr == VRs.Time:
-            return factory.Faker("dicom_time").generate({})
+            return faker.dicom_time()
         elif vr == VRs.UniqueIdentifier:
-            return factory.Faker("dicom_ui").generate({})
+            return faker.dicom_ui()
         elif vr == VRs.UnsignedLong:
             return factory.random.randgen.randint(0, 2**32)
         elif vr == VRs.Unknown:
@@ -279,7 +279,7 @@ class DataElementFactory(factory.Factory):
         elif vr == VRs.UnsignedShort:
             return factory.random.randgen.randint(0, 2**16)
         elif vr == VRs.UnlimitedText:
-            return factory.Faker('text').generate()
+            return faker.text()
         else:
             raise DataElementFactoryException(
                 f"I dont know how to generate a mock value for"
