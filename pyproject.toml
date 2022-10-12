@@ -6,7 +6,6 @@ authors = ["sjoerdk <sjoerd.kerkstra@radboudumc.nl>"]
 include = ["dicomgenerator/resources"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
 pydicom = "^2.3.0"
 numpy = "^1.23.3"
 Pillow = "^9.2.0"
@@ -23,12 +22,13 @@ build-backend = "poetry.core.masonry.api"
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py37, py38, py39
+envlist = py38, py39, py310
 [gh-actions]
 python =
-    3.7: py37
     3.8: py38
     3.9: py39
+    3.10: py310
+
 [testenv]
 whitelist_externals = poetry
 commands =
