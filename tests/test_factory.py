@@ -53,7 +53,7 @@ def test_data_element_factory_argument(
 
     element = DataElementFactory(tag=tag)
     assert element.tag == Tag(tag)
-    assert element.vr == expected_vr
+    assert element.VR == expected_vr
     assert element.value == expected_value
 
 
@@ -67,9 +67,9 @@ def test_data_element_factory_init():
 
     # For unknown tags, just give a default VR. Assuming the default position
     # for users of DataElementFactory will be 'Don't care, just give me the Element'
-    assert DataElementFactory(tag=(0xEE30, 0xF120)).vr == VRs.LongString.short_name
+    assert DataElementFactory(tag=(0xEE30, 0xF120)).VR == VRs.LongString.short_name
     assert (
-        DataElementFactory.create(tag=(0xEE30, 0xF120), value=100).vr
+        DataElementFactory.create(tag=(0xEE30, 0xF120), value=100).VR
         == VRs.LongString.short_name
     )
 

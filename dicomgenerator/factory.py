@@ -180,7 +180,7 @@ class DataElementFactory(factory.Factory):
 
     Will always match VR and random value to given values
 
-    >>> DataElementFactory(tag='PatientName').vr = 'PN'
+    >>> DataElementFactory(tag='PatientName').VR = 'PN'
     >>> DataElementFactory(tag='PatientName').value = 'JONES^Sarah'
 
     You can still set custom values as well:
@@ -190,7 +190,7 @@ class DataElementFactory(factory.Factory):
     -----
     For an unknown tag without an explicit VR, this factory will assign a
     LongString (LO) VR:
-    >>> DataElementFactory(tag=('ee011020')).vr = 'LO'
+    >>> DataElementFactory(tag=('ee011020')).VR = 'LO'
 
     If this is not what you want, pass an explicit VR:
     >>> DataElementFactory(tag=('ee011020'), VR='SL', value=-10.2)
@@ -202,7 +202,7 @@ class DataElementFactory(factory.Factory):
     tag = Tag("PatientID")
 
     @factory.lazy_attribute
-    def vr(self):
+    def VR(self):  # noqa This has to uppercase to match pydicom DataElement
         """Find the correct Value Representation for this tag from pydicom"""
         try:
             return dictionary_VR(Tag(self.tag))
@@ -222,7 +222,7 @@ class DataElementFactory(factory.Factory):
         """
         faker = Faker()
         faker.add_provider(DICOMVRProvider)
-        vr = VRs.short_name_to_vr(self.vr)
+        vr = VRs.short_name_to_vr(self.VR)
         if vr == VRs.ApplicationEntity:
             return "MockEntity"
         elif vr == VRs.AgeString:

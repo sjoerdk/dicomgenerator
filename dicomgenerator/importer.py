@@ -219,7 +219,7 @@ def to_json(dataset):
     dataset.decode()
 
     def just_decode_handler(input):
-        return {"vr": input.vr, "InlineBinary": input.value.decode()}
+        return {"vr": input.VR, "InlineBinary": input.value.decode()}
 
     megabyte = 1024 * 1024
     return dataset.to_json(

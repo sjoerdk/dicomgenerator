@@ -37,7 +37,7 @@ doc = ["sphinx", "sphinx-rtd-theme", "sphinxcontrib-spelling"]
 
 [[package]]
 name = "faker"
-version = "15.0.0"
+version = "15.1.0"
 description = "Faker is a Python package that generates fake data for you."
 category = "main"
 optional = false
