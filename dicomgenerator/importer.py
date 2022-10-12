@@ -42,10 +42,10 @@ class Template:
         output_path: Path
 
         """
-        with open(output_path, 'w') as f:
+        with open(output_path, "w") as f:
             f.write(to_json(self.template))
         if self.description:
-            with open(self.get_description_path(output_path), 'w') as f:
+            with open(self.get_description_path(output_path), "w") as f:
                 f.write(self.description)
 
     @staticmethod
@@ -69,12 +69,12 @@ class Template:
         description_path = cls.get_description_path(template_path)
 
         if description_path.exists():
-            with open(description_path, 'r') as f:
+            with open(description_path) as f:
                 description = f.readlines()
         else:
             description = None
 
-        with open(template_path, 'r') as f:
+        with open(template_path) as f:
             template = Dataset.from_json(json.load(f))
         return cls(template=template, description=description)
 
@@ -90,7 +90,7 @@ class Template:
 
         """
         if self.description_path.exists():
-            with open(self.description_path + ".json", 'r') as f:
+            with open(self.description_path + ".json") as f:
                 return f.readlines()
         else:
             return None
@@ -103,7 +103,7 @@ class Template:
         parsed json structure
 
         """
-        with open(self.folder_path / self.file_name + ".json", 'r') as f:
+        with open(self.folder_path / self.file_name + ".json") as f:
             return json.read(f)
 
 
@@ -132,8 +132,9 @@ def save_as_template(dataset, description=None, output_path=None):
         output_path = RESOURCE_PATH / f"tempate-{uuid.uuid4()}"
 
     # replace image data
-    dataset = replace_pixel_data(dataset=dataset,
-                                 image_path=RESOURCE_PATH / "skeleton_tiny.jpg")
+    dataset = replace_pixel_data(
+        dataset=dataset, image_path=RESOURCE_PATH / "skeleton_tiny.jpg"
+    )
 
     # Save dicom
     Template(template=dataset, description=description).save(output_path)
@@ -154,15 +155,16 @@ def replace_pixel_data(dataset, image_path):
 
     """
     im = Image.open(image_path)
-    pix = im.load()
     pixel_values = list(im.getdata())
     # convert image into numpy ndarray. use only R channel from RGB as this is
     # a greyscale image
     pix_np = np.array([x[0] for x in pixel_values])
     w, h = im.size  # Set dimensions
     pix_np.shape = (h, w)
-    pix_np = rescale(pix_np, min=-2048, max=1000)  # make values a bit realistic for CT
-    dataset.PixelData = pix_np.astype(np.int16).tostring()  # Not sure whether this can be other then int16,.
+    pix_np = rescale(pix_np, min=-2048, max=1000)  # make values CT-like
+    dataset.PixelData = pix_np.astype(
+        np.int16
+    ).tostring()  # Not sure whether this can be other than int16.
     dataset.Rows, dataset.Columns = pix_np.shape
     return dataset
 
@@ -188,7 +190,6 @@ def rescale(ndarray, min, max):
     old_dtype = ndarray.dtype
     new_range = max - min
     range_scale = new_range / old_range
-    range_offset = min - old_min
 
     ndarray = ndarray.astype(float)
     ndarray -= old_min  # translate to make based on 0
@@ -218,10 +219,9 @@ def to_json(dataset):
     dataset.decode()
 
     def just_decode_handler(input):
-        return {"vr": input.VR, "InlineBinary": input.value.decode()}
+        return {"vr": input.vr, "InlineBinary": input.value.decode()}
 
     megabyte = 1024 * 1024
     return dataset.to_json(
-        bulk_data_element_handler=just_decode_handler,
-        bulk_data_threshold=megabyte * 3
+        bulk_data_element_handler=just_decode_handler, bulk_data_threshold=megabyte * 3
     )

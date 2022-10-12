@@ -1,14 +1,12 @@
 from pathlib import Path
 
-import pydicom
-
 from dicomgenerator.exporter import export
 from dicomgenerator.factory import CTDatasetFactory
 
 
 """Generate some CT-like DICOM files """
 
-output_dir = Path('/tmp/dummy_dicom')
+output_dir = Path("/tmp/dummy_dicom")
 
 
 def generate_some_dicom_files(output_dir):
@@ -22,11 +20,14 @@ def generate_some_dicom_files(output_dir):
 
 def generate_file_with_specifics(output_path):
     """Generate a dicom file, set specific tags. All tags supported by pydicom
-    can be set here"""
-    export(dataset=CTDatasetFactory(PatientSex='M',
-                                    PatientName='Smith^Harry',
-                                    PatientIdentityRemoved='NO'),
-           path=output_path)
+    can be set here
+    """
+    export(
+        dataset=CTDatasetFactory(
+            PatientSex="M", PatientName="Smith^Harry", PatientIdentityRemoved="NO"
+        ),
+        path=output_path,
+    )
 
     print(f"Wrote file to {output_path}")
 

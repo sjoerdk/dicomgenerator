@@ -12,7 +12,7 @@ from tests import RESOURCE_PATH
 
 @pytest.fixture()
 def a_dataset():
-    return pydicom.dcmread(str(RESOURCE_PATH / 'dcmfile1'))
+    return pydicom.dcmread(str(RESOURCE_PATH / "dcmfile1"))
 
 
 def test_reader(a_dataset):
@@ -43,14 +43,13 @@ def test_reconstruct(a_dataset):
 
 
 def test_template_load_save(a_dataset, tmpdir):
-    output_path = Path(tmpdir) / 'test.json'
+    output_path = Path(tmpdir) / "test.json"
 
-    description = 'test_description'
-    save_as_template(dataset=a_dataset, description=description,
-                     output_path=output_path)
+    description = "test_description"
+    save_as_template(
+        dataset=a_dataset, description=description, output_path=output_path
+    )
 
     loaded = Template.load(output_path)
     assert loaded.template == a_dataset
     assert description == description
-
-

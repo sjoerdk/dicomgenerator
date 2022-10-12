@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import pytest
 from pydicom.dataelem import DataElement
 from pydicom.tag import BaseTag, Tag
@@ -16,8 +15,7 @@ def fix_random_seed():
 
 
 def test_factory():
-    """Check whether dataset factory actually generates datasets
-    """
+    """Check whether dataset factory actually generates datasets"""
     generated = CTDatasetFactory()
     assert generated.SeriesDate == generated.AcquisitionDate
     assert CTDatasetFactory(AccessionNumber="1234").AccessionNumber == "1234"
@@ -27,7 +25,8 @@ def test_factory_random(fix_random_seed):
     """Test reproducibility of randomized tests
 
     Kind of a meta test as it tests pytest and factory instead of my own code.
-    Still, I want to make sure this works"""
+    Still, I want to make sure this works
+    """
     dataset = CTDatasetFactory()
     assert str(dataset.PatientName) == "Vaessen^Maud"
 
@@ -50,18 +49,16 @@ def test_factory_random(fix_random_seed):
 def test_data_element_factory_argument(
     fix_random_seed, tag, expected_vr, expected_value
 ):
-    """Try to create a DataElementFactory of several types
-    """
+    """Try to create a DataElementFactory of several types"""
 
     element = DataElementFactory(tag=tag)
     assert element.tag == Tag(tag)
-    assert element.VR == expected_vr
+    assert element.vr == expected_vr
     assert element.value == expected_value
 
 
 def test_data_element_factory_init():
-    """Check different init methods
-    """
+    """Check different init methods"""
     # factory casts tag init argument to Tag(). Verify that this works.
     assert type(DataElementFactory().tag) == BaseTag
     assert type(DataElement(tag="Modality", VR="SH", value="kees").tag) == BaseTag
@@ -70,9 +67,11 @@ def test_data_element_factory_init():
 
     # For unknown tags, just give a default VR. Assuming the default position
     # for users of DataElementFactory will be 'Don't care, just give me the Element'
-    assert DataElementFactory(tag=(0xee30, 0xf120)).VR == VRs.LongString.short_name
-    assert DataElementFactory.create(
-        tag=(0xee30, 0xf120), value=100).VR == VRs.LongString.short_name
+    assert DataElementFactory(tag=(0xEE30, 0xF120)).vr == VRs.LongString.short_name
+    assert (
+        DataElementFactory.create(tag=(0xEE30, 0xF120), value=100).vr
+        == VRs.LongString.short_name
+    )
 
 
 def test_data_element_factory_exceptions(fix_random_seed):

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Unit test package for dicomgenerator."""
 from pathlib import Path
 

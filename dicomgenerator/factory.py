@@ -1,18 +1,15 @@
-"""Functions to create pydicom datasets to look like different types of DICOM
-"""
+"""Functions to create pydicom datasets to look like different types of DICOM"""
 
 import json
 import datetime
 import factory
 import pydicom
-import random
 
-from factory.random import get_random_state
 from pydicom.datadict import dictionary_VR
 from pydicom.tag import Tag
 
-from dicomgenerator.dicom import VR, VRs
-from dicomgenerator.exceptions import DICOMGeneratorException
+from dicomgenerator.dicom import VRs
+from dicomgenerator.exceptions import DICOMGeneratorError
 from dicomgenerator.resources import TEMPLATE_PATH
 from dicomgenerator.settings import DICOM_GENERATOR_ROOT_UID
 from factory.fuzzy import FuzzyDate
@@ -29,14 +26,13 @@ class FuzzyDICOMDateString(FuzzyDate):
     """
 
     def fuzz(self):
-        date = super(FuzzyDICOMDateString, self).fuzz()
+        date = super().fuzz()
         return date.strftime("%Y%m%d")
 
 
 class DatasetFactory(factory.Factory):
-    """Generates a pydicom dataset based on a json-dicom template
+    """Generates a pydicom dataset based on a json-dicom template"""
 
-    """
     # This bytes preamble is actually required. DICOM is strange. See.
     # http://dicom.nema.org/dicom/2013/output/chtml/part10/chapter_7.html
     preamble = b"\0" * 128
@@ -56,7 +52,8 @@ class DatasetFactory(factory.Factory):
 
         """
         obj = model_class.from_json(
-            *args, json_dataset=json.load(open(template_path, "r")),
+            *args,
+            json_dataset=json.load(open(template_path)),
         )
         for key, value in kwargs.items():  # overwrite loaded args with kwargs
             setattr(obj, key, value)
@@ -115,7 +112,7 @@ class DICOMVRProvider(BaseProvider):
         return date.strftime("%Y%m%d")
 
     def dicom_ui(self):
-        """generate Valid DICOM UID (VR = UI)
+        """Generate Valid DICOM UID (VR = UI)
 
         Uses factory boy random seed, so setting seed in test yields the same
         UID value each time
@@ -124,10 +121,12 @@ class DICOMVRProvider(BaseProvider):
         -------
         str
         """
-        return str(generate_uid(
-            prefix=DICOM_GENERATOR_ROOT_UID,
-            entropy_srcs=[str(factory.random.randgen.getrandbits(100))]),
-                   )
+        return str(
+            generate_uid(
+                prefix=DICOM_GENERATOR_ROOT_UID,
+                entropy_srcs=[str(factory.random.randgen.getrandbits(100))],
+            ),
+        )
 
 
 factory.Faker.add_provider(DICOMVRProvider)
@@ -143,7 +142,7 @@ class CTDatasetFactory(DatasetFactory):
     class Meta:
         exclude = ("base_study_date", "base_study_time")
 
-    template_path = TEMPLATE_PATH / "ct_toshiba_aquilion.json"
+    template_path = str(TEMPLATE_PATH / "ct_toshiba_aquilion.json")
     AccessionNumber = "1234"
 
     base_study_date = factory.Faker("dicom_date")
@@ -191,7 +190,7 @@ class DataElementFactory(factory.Factory):
     -----
     For an unknown tag without an explicit VR, this factory will assign a
     LongString (LO) VR:
-    >>> DataElementFactory(tag=('ee011020')).VR = 'LO'
+    >>> DataElementFactory(tag=('ee011020')).vr = 'LO'
 
     If this is not what you want, pass an explicit VR:
     >>> DataElementFactory(tag=('ee011020'), VR='SL', value=-10.2)
@@ -200,20 +199,20 @@ class DataElementFactory(factory.Factory):
     class Meta:
         model = pydicom.dataelem.DataElement
 
-    tag = Tag('PatientID')
+    tag = Tag("PatientID")
 
     @factory.lazy_attribute
-    def VR(self):
+    def vr(self):
         """Find the correct Value Representation for this tag from pydicom"""
         try:
             return dictionary_VR(Tag(self.tag))
-        except KeyError as e:
+        except KeyError:
             # unknown tag. Just return set value, assuming user want to just
             # get on with it
             return VRs.LongString.short_name
 
     @factory.lazy_attribute
-    def value(self):
+    def value(self):  # noqa
         """Generate a valid mock value for this type of VR
 
         Raises
@@ -223,7 +222,7 @@ class DataElementFactory(factory.Factory):
         """
         faker = Faker()
         faker.add_provider(DICOMVRProvider)
-        vr = VRs.short_name_to_vr(self.VR)
+        vr = VRs.short_name_to_vr(self.vr)
         if vr == VRs.ApplicationEntity:
             return "MockEntity"
         elif vr == VRs.AgeString:
@@ -249,7 +248,7 @@ class DataElementFactory(factory.Factory):
         elif vr == VRs.LongText:
             return faker.text()[:10240]
         elif vr == VRs.OtherByteString:
-            return b'\x13\00'
+            return b"\x13\00"
         elif vr == VRs.OtherDoubleString:
             return "MockDoubleString"
         elif vr == VRs.OtherFloatString:
@@ -261,11 +260,11 @@ class DataElementFactory(factory.Factory):
         elif vr == VRs.ShortString:
             return "MockShortString"
         elif vr == VRs.SignedLong:
-            return factory.random.randgen.randint(-2**32, 2**32)
+            return factory.random.randgen.randint(-(2**32), 2**32)
         elif vr == VRs.Sequence:
             return []
         elif vr == VRs.SignedShort:
-            return factory.random.randgen.randint(-2**16, 2**16)
+            return factory.random.randgen.randint(-(2**16), 2**16)
         elif vr == VRs.ShortText:
             return faker.sentence()
         elif vr == VRs.Time:
@@ -281,10 +280,11 @@ class DataElementFactory(factory.Factory):
         elif vr == VRs.UnlimitedText:
             return faker.text()
         else:
-            raise DataElementFactoryException(
+            raise DataElementFactoryError(
                 f"I dont know how to generate a mock value for"
-                f" {vr}, the VR of '{self.tag}'")
+                f" {vr}, the VR of '{self.tag}'"
+            )
 
 
-class DataElementFactoryException(DICOMGeneratorException):
+class DataElementFactoryError(DICOMGeneratorError):
     pass

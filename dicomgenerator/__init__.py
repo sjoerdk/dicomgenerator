@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Top-level package for dicomgenerator."""
 
 __author__ = """Sjoerd Kerkstra"""
