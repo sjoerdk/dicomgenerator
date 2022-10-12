@@ -6,10 +6,12 @@ authors = ["sjoerdk <sjoerd.kerkstra@radboudumc.nl>"]
 include = ["dicomgenerator/resources"]
 
 [tool.poetry.dependencies]
+python = "^3.7"
 pydicom = "^2.3.0"
 numpy = "^1.23.3"
 Pillow = "^9.2.0"
 factory-boy = "^3.2.1"
+pytest-cov = "^4.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.3"
