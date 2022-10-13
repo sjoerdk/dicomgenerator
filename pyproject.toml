@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dicomgenerator"
-version = "0.6.0"
+version = "0.7.0"
 description = ""
 authors = ["sjoerdk <sjoerd.kerkstra@radboudumc.nl>"]
 include = ["dicomgenerator/resources"]
