@@ -1,8 +1,11 @@
 [tool.poetry]
 name = "dicomgenerator"
 version = "0.7.0"
-description = ""
+description = "Generate pydicom datasets and data elements for use in testing"
 authors = ["sjoerdk <sjoerd.kerkstra@radboudumc.nl>"]
+readme = "README.md"
+license = "MIT"
+repository = "https://github.com/sjoerdk/dicomgenerator"
 include = ["dicomgenerator/resources"]
 
 [tool.poetry.dependencies]
