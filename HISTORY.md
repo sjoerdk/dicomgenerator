@@ -1,4 +1,7 @@
 # History
+## 0.7.1 (2022-10-13) - Pypi info fix
+* Adds missing readme, license, repo to project description
+
 ## 0.7.0 (2022-10-13) - More dusting, AnnotatatedDataset
 * Replaces readthedocs with simple markup readme
 * Renames and refactors code, removes outdated and disused code
