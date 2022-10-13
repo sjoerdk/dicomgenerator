@@ -35,50 +35,50 @@ I have found this quite useful in testing:
     from dicomgenerator.generators import quick_dataset
     ds = quick_dataset(PatientName='Jane', StudyDescription='Test')
 
-    # >>> ds.PatientName
-    # 'Jane'
-    # >>> ds.StudyDescription
-    # 'Test'
+    # >>> ds.PatientName -> 'Jane'     
+    # >>> ds.StudyDescription -> 'Test'
 ```
 
 
 ### Generating a dataset
+Generate a realistic CT dataset
 
 ```python 
     from dicomgenerator.factory import CTDatasetFactory
 
     # Generate from template
-    >>> CTDatasetFactory().PatientName = 'van Haarlem^Anouk'  #  generated random name
-    >>> CTDatasetFactory().PatientName = 'Loreal^Casper'      #  generated random name
+    >>> CTDatasetFactory().PatientName -> 'van Haarlem^Anouk'  #  generated random name
+    >>> CTDatasetFactory().PatientName -> 'Loreal^Casper'      #  generated random name
 
     # Overwrite arbitrary DICOM elements
     ds.CTDatasetFactory(PatientSex='M', PatientName='Smith^Harry')
-    >>> ds.PatientName = 'Smith^Harry'
-    >>> ds.PatientSex  = 'M'
+    >>> ds.PatientName -> 'Smith^Harry'
+    >>> ds.PatientSex  -> 'M'
 
     # generated UIDs and dates are valid DICOM
-    >>> CTDatasetFactory().StudyTime        = '130624.929'
-    >>> CTDatasetFactory().StudyDate        = '20110508'
-    >>> CTDatasetFactory().StudyInstanceUID = '1.2.826.0.1.3680'
+    >>> CTDatasetFactory().StudyTime        -> '130624.929'
+    >>> CTDatasetFactory().StudyDate        -> '20110508'
+    >>> CTDatasetFactory().StudyInstanceUID -> '1.2.826.0.1.3680'
 ```
 
 
 ## Generating a data element
-```python
 
+```python
+    # import
     from dicomgenerator.factory import DataElementFactory
 
     # Creating a DICOM data element by name will give a realistic value and correct VR
-    >>> DataElementFactory(tag='PatientName').value  = "van Ooyen^Fiene"
-    >>> DataElementFactory(tag='PatientName').VR == 'PN'
+    >>> DataElementFactory(tag='PatientName').value -> "van Ooyen^Fiene"
+    >>> DataElementFactory(tag='PatientName').VR -> 'PN'
 
     # You can also give DICOM tags as hex
-    >>> DataElementFactory(tag=0x00100010).value = "Weil^Jack"
+    >>> DataElementFactory(tag=0x00100010).value -> "Weil^Jack"
 
     # Dates, times and UIDs all work.
-    >>> DataElementFactory(tag="AcquisitionTime").value = '184146.928'
-    >>> DataElementFactory(tag="PatientBirthDate").value = '20120511'
-    >>> DataElementFactory(tag="SeriesInstanceUID").value = '1.2.826.0.1.3680'
+    >>> DataElementFactory(tag="AcquisitionTime").value   -> '184146.928'
+    >>> DataElementFactory(tag="PatientBirthDate").value  -> '20120511'
+    >>> DataElementFactory(tag="SeriesInstanceUID").value -> '1.2.826.0.1.3680'
 ```
 
 ### In reproducible tests
@@ -94,10 +94,7 @@ You can set the random seed in [factory-boy](https://factoryboy.readthedocs.io) 
 ```
 
 
-Credits
--------
+## Credits
 
-This package was originally created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+This package was originally created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [audreyr/cookiecutter-pypackage](https://github.com/audreyr/cookiecutter-pypackage) project template.
+ 
