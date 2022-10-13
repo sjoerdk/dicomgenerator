@@ -5,6 +5,5 @@
 * Lints all code flake8 and mypy
 * Removes python 3.7 support
 
-
 ## 0.1.0 (2019-12-31)
 * First release on PyPI.

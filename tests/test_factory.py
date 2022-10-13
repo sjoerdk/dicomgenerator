@@ -4,7 +4,8 @@ from pydicom.dataelem import DataElement
 from pydicom.tag import BaseTag, Tag
 
 from dicomgenerator.dicom import VRs
-from dicomgenerator.factory import CTDatasetFactory, DataElementFactory
+from dicomgenerator.generators import DataElementFactory
+from dicomgenerator.templates import CTDatasetFactory
 from factory import random
 
 
