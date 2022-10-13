@@ -6,6 +6,7 @@ import json
 import pydicom
 
 from pydicom.datadict import dictionary_VR
+from pydicom.dataset import Dataset
 from pydicom.tag import Tag
 
 from dicomgenerator.dicom import VRs
@@ -15,6 +16,29 @@ from factory.fuzzy import FuzzyDate
 from faker.providers import BaseProvider
 from faker import Faker
 from pydicom.uid import generate_uid
+
+
+def quick_dataset(*_, **kwargs) -> Dataset:
+    """A dataset with keyword args as tagname - value pairs
+
+    For example:
+    >>> ds = quick_dataset(PatientName='Jane', StudyDescription='Test')
+    >>> ds.PatientName
+    'Jane'
+    >>> ds.StudyDescription
+    'Test'
+
+    Raises
+    ------
+    ValueError
+        If any input key is not a valid DICOM keyword
+
+    """
+    dataset = Dataset()
+    for tagname, value in kwargs.items():
+        Tag(tagname)  # assert valid dicom keyword. pydicom will not do this.
+        dataset.__setattr__(tagname, value)
+    return dataset
 
 
 class FuzzyDICOMDateString(FuzzyDate):

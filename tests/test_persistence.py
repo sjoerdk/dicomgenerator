@@ -1,16 +1,17 @@
 from io import StringIO
 
-from dicomgenerator.persistence import AnnotatedDataset, EditableDataset
+from dicomgenerator.persistence import JSONDataset
+from dicomgenerator.annotation import AnnotatedDataset
 
 
 def test_editable_dataset_save_load(a_dataset):
     """Save and then load again"""
     file = StringIO()
-    ds = EditableDataset(dataset=a_dataset)
+    ds = JSONDataset(dataset=a_dataset)
     ds.save(file)
     file.seek(0)
 
-    for loaded_tag in EditableDataset.load(file):
+    for loaded_tag in JSONDataset.load(file).dataset:
         assert ds.dataset[loaded_tag.tag] == loaded_tag
 
 
