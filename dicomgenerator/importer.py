@@ -16,7 +16,7 @@ from dicomgenerator.resources import RESOURCE_PATH
 
 class Template:
     """A couple of files describing a dicom template. Makes is easy to save a
-    human readable description together with the template
+    human-readable description together with the template
 
     """
 

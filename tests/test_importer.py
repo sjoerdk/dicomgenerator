@@ -2,17 +2,9 @@ import json
 from copy import deepcopy
 from pathlib import Path
 
-import pydicom
-import pytest
 from pydicom.dataset import Dataset
 
 from dicomgenerator.importer import to_json, save_as_template, Template
-from tests import RESOURCE_PATH
-
-
-@pytest.fixture()
-def a_dataset():
-    return pydicom.dcmread(str(RESOURCE_PATH / "dcmfile1"))
 
 
 def test_reader(a_dataset):
