@@ -1,0 +1,44 @@
+"""Command line interface code
+
+Examples
+--------
+dicomgen convert to_json <dcm file in>
+
+dicomgen convert to_dicom <json file in>
+"""
+import logging
+
+import click
+
+from dicomgenerator.tools import to_annotated_dataset
+
+
+@click.group()
+def main():
+    logging.basicConfig(level=logging.INFO)
+
+
+@click.group(name="convert")
+def convert():
+    """Convert between DICOM and JSON"""
+    pass
+
+
+@click.command()
+@click.argument("json_file", type=click.Path())
+@click.option("--output_file", type=click.Path(), default=None)
+@click.option(
+    "--replace-pixel-data/--no_replace_pixel_data",
+    default=True,
+    help="Replace pixel data with tiny dummy image",
+)
+def to_json(json_file, output_file, replace_pixel_data):
+    to_annotated_dataset(
+        input_path=json_file,
+        replace_pixel_data=replace_pixel_data,
+        output_path=output_file,
+    )
+
+
+main.add_command(convert)
+convert.add_command(to_json)
