@@ -1,6 +1,7 @@
 # History
-## 0.8.0 (2022-10-17) - Add cli
-* Adds single cli method to convert DIOCM to annotated JSON (#13)
+## 0.8.1 (2022-10-17) - Add cli
+* Adds single cli method to convert DICOM to annotated JSON (#13)
+* Adds tag decription to annotated JSON (AnnotatedDataset)
 
 ## 0.7.1 (2022-10-13) - Pypi info fix
 * Adds missing readme, license, repo to project description

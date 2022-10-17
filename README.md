@@ -93,6 +93,20 @@ You can set the random seed in [factory-boy](https://factoryboy.readthedocs.io) 
         assert element = DataElementFactory(tag='PatientName').value == "van Ooyen^Fiene"
 ```
 
+### Command Line Interface
+You can convert a DICOM file to AnnotatedDataset via the commandline. by default this will write an annotated dataset to the same folder, appending`_template.json`
+
+```
+$ dicomgen convert to-json /tmp/dicom_file
+$ ls
+dicom_file  dicom_file_template.json
+```
+
+For options, use
+```
+$ dicomgen convert to-json --help
+```
+
 
 ## Credits
 
