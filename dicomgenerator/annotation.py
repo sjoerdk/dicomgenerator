@@ -1,6 +1,7 @@
 """Code for adding annotations to datasets"""
 from typing import Any, Union
 
+from pydicom.datadict import dictionary_keyword
 from pydicom.dataset import Dataset
 from pydicom.tag import Tag
 
@@ -10,12 +11,15 @@ from dicomgenerator.persistence import JSONDataset
 class AnnotatedDataset(JSONDataset):
 
     json_keyword = "annotation"  # serialize annotations under this key
+    json_tag_name_keyword = "tag_name"  # put dicom tag name under this key
 
     def __init__(self, dataset, description="No description", annotations=None):
         """A dataset with a description and annotations associated with each tag
 
-        Can be persisted to disk in a human-readable and editable way. Annotations
-        are rendered as part of each tag for easy editing
+        Can be persisted to disk in a human-readable and editable way. Leverages
+        pydicom's Dataset.to_json() method, but adds annotation field
+        and tag name field for easier reading of the tag (pydicom only persists
+        tag values like '00100010').
 
         Parameters
         ----------
@@ -36,8 +40,8 @@ class AnnotatedDataset(JSONDataset):
         else:
             self.annotations = {Tag(x): y for x, y in annotations.items()}
 
-    def __iter__(self):
-        """Returns tuples (DicomElement, Annotation)"""
+    def all_tags(self):
+        """Returns tuples (DicomElement, Annotation) for all tags"""
         yield from ((x, self.annotations.get(x.tag)) for x in self.dataset)
 
     def get_annotation(self, key: Union[str, int]) -> Any:
@@ -47,6 +51,11 @@ class AnnotatedDataset(JSONDataset):
         dataset = self.dataset.to_json_dict()
         for tag, element_dict in dataset.items():
             element_dict[self.json_keyword] = self.get_annotation(tag)
+            try:
+                element_dict[self.json_tag_name_keyword] = dictionary_keyword(tag)
+            except KeyError:
+                element_dict[self.json_tag_name_keyword] = "Unknown"
+
         return {"description": self.description, "dataset": dataset}
 
     @classmethod
@@ -57,6 +66,7 @@ class AnnotatedDataset(JSONDataset):
             if element_dict.get(cls.json_keyword):
                 annotations[Tag(tag)] = element_dict.get(cls.json_keyword)
             del element_dict[cls.json_keyword]
+            del element_dict[cls.json_tag_name_keyword]
 
         return cls(
             dataset=Dataset.from_json(dataset_dict),

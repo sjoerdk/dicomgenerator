@@ -25,7 +25,7 @@ def test_annotated_dataset(a_dataset):
     )
 
     # check getting annotations
-    annotations = [x for x in ad]
+    annotations = [x for x in ad.all_tags()]
     _, annotation = annotations[23]
     assert annotation == an_annotation
     assert ad.get_annotation("PatientID") == an_annotation
