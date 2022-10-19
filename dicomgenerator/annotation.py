@@ -5,7 +5,7 @@ from pydicom.datadict import dictionary_keyword
 from pydicom.dataset import Dataset
 from pydicom.tag import Tag
 
-from dicomgenerator.persistence import JSONDataset
+from dicomgenerator.persistence import FromDicomFileMixin, JSONDataset
 
 
 class AnnotatedDataset(JSONDataset):
@@ -90,3 +90,12 @@ class AnnotatedDataset(JSONDataset):
             annotations=annotations,
             description=dict_in["description"],
         )
+
+
+class FileAnnotatedDataset(AnnotatedDataset, FromDicomFileMixin):
+    """AnnotatedDataset read from DICOM file on disk
+
+    Makes conversion (DICOM -> Example DICOM) cleaner
+    """
+
+    pass
