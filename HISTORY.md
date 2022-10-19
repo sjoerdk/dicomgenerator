@@ -1,4 +1,7 @@
 # History
+## 0.8.2 (2022-10-19) - Explicit JSONSerializable
+* Adds JSONSerializable class for more explicit inheritance, improves CLI
+
 ## 0.8.1 (2022-10-17) - Add cli
 * Adds single cli method to convert DICOM to annotated JSON (#13)
 * Adds tag decription to annotated JSON (AnnotatedDataset)
