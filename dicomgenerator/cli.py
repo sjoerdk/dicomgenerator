@@ -24,7 +24,7 @@ def convert():
 
 
 @click.command()
-@click.argument("dicom", type=click.Path(), help="DICOM file")
+@click.argument("dicom_file", type=click.Path())
 @click.option("--output_file", type=click.Path(), default=None)
 @click.option(
     "--replace-image-data/--no-replace-image-data",
@@ -32,6 +32,7 @@ def convert():
     help="Replace pixel data with tiny dummy image",
 )
 def to_json(dicom_file, output_file, replace_image_data):
+    """Convert DICOM file to JSON representation"""
     to_annotated_dataset(
         input_path=dicom_file,
         replace_pixel_data=replace_image_data,

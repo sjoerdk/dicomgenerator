@@ -1,6 +1,6 @@
 from click.testing import CliRunner
 import dicomgenerator.cli as cli
-from dicomgenerator.annotation import AnnotatedDataset
+from dicomgenerator.annotation import AnnotatedDataset, FileAnnotatedDataset
 
 
 def test_cli_to_json(a_dataset_path):
@@ -12,3 +12,15 @@ def test_cli_to_json(a_dataset_path):
     with open(str(a_dataset_path) + "_template.json") as f:
         annotated = AnnotatedDataset.load(f)  # json dataset should be written
     assert annotated.description == "Converted"
+
+
+def test_cli_to_dataset(tmp_path, a_dataset_path):
+    """Test loading from dicom and saving as json"""
+    fad = FileAnnotatedDataset.from_dicom_path(a_dataset_path)
+
+    # by default this
+    saved_path = fad.save_to_path()
+    with open(saved_path) as f:
+        loaded = AnnotatedDataset.load(f)
+    for element in fad.dataset:
+        assert element == loaded.dataset[element.tag]
