@@ -103,3 +103,6 @@ ENV/
 
 # Pycharm
 .idea
+
+# poetry, no lock as this is a lib, not an app
+poetry.lock
