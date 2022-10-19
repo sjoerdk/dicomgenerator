@@ -3,7 +3,6 @@
 Examples
 --------
 dicomgen convert to_json <dcm file in>
-
 dicomgen convert to_dicom <json file in>
 """
 import logging
@@ -25,17 +24,17 @@ def convert():
 
 
 @click.command()
-@click.argument("json_file", type=click.Path())
+@click.argument("dicom", type=click.Path(), help="DICOM file")
 @click.option("--output_file", type=click.Path(), default=None)
 @click.option(
-    "--replace-pixel-data/--no_replace_pixel_data",
+    "--replace-image-data/--no-replace-image-data",
     default=True,
     help="Replace pixel data with tiny dummy image",
 )
-def to_json(json_file, output_file, replace_pixel_data):
+def to_json(dicom_file, output_file, replace_image_data):
     to_annotated_dataset(
-        input_path=json_file,
-        replace_pixel_data=replace_pixel_data,
+        input_path=dicom_file,
+        replace_pixel_data=replace_image_data,
         output_path=output_file,
     )
 

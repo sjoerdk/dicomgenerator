@@ -20,9 +20,7 @@ def dataset_to_json(dataset, replace_image_data=True, description="Converted"):
     by default
     """
     if replace_image_data:
-        dataset = replace_pixel_data(
-            dataset, image_path=RESOURCE_PATH / "skeleton_tiny.jpg"
-        )
+        dataset = replace_pixel_data(dataset)
 
     return AnnotatedDataset(dataset=dataset, description=description)
 
@@ -66,13 +64,13 @@ def to_annotated_dataset(
     return output_path
 
 
-def replace_pixel_data(dataset, image_path):
+def replace_pixel_data(dataset, image_path=None):
     """Replace the DICOM PixelData tag with the data from image_path
 
     Parameters
     ----------
     dataset: pydicom.dataset.Dataset
-    image_path: pathlike to rgb image readable with pillow
+    image_path: pathlike to rgb image readable with pillow, optional
 
     Returns
     -------
@@ -81,8 +79,11 @@ def replace_pixel_data(dataset, image_path):
 
     Notes
     -----
-    TODO: This recscales image values to be CT-like (-2048 to 1000). Make selectable
+    TODO: This rescales image values to be CT-like (-2048 to 1000). Make selectable
     """
+    if not image_path:
+        image_path = RESOURCE_PATH / "skeleton_tiny.jpg"
+
     logger.info(f'Replacing image data with image at "{image_path}"')
 
     im = Image.open(image_path)

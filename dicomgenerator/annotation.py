@@ -27,10 +27,10 @@ class AnnotatedDataset(JSONDataset):
             The pydicom dataset
         description: str
             Description of this dataset
-        annotations: Dict[TagLike, JsonSerializable]
+        annotations: Dict[TagLike, Union[JSONSerializable, str, int, Dict]]
             Annotations per tag. TagLike can be DICOM tag name such as 'PatientID'
-            ,hex such as '0x0010,0x0012' or a Tag object. JsonSerializable is
-            anything that you can put in json.dumps()
+            ,hex such as '0x0010,0x0012' or a Tag object. Value is JSONSerializable
+            or anything that you can put in json.dumps()
         """
 
         super().__init__(dataset)
@@ -47,10 +47,20 @@ class AnnotatedDataset(JSONDataset):
     def get_annotation(self, key: Union[str, int]) -> Any:
         return self.annotations.get(Tag(key))
 
-    def as_dict(self):
+    @staticmethod
+    def annotation_to_json_obj(annotation):
+        """Make sure annotation can be put in json.dumps()"""
+        if hasattr(annotation, "to_json_dict"):
+            return annotation.to_json_dict()
+        else:
+            return annotation
+
+    def to_json_dict(self):
         dataset = self.dataset.to_json_dict()
         for tag, element_dict in dataset.items():
-            element_dict[self.json_keyword] = self.get_annotation(tag)
+            element_dict[self.json_keyword] = self.annotation_to_json_obj(
+                self.get_annotation(tag)
+            )
             try:
                 element_dict[self.json_tag_name_keyword] = dictionary_keyword(tag)
             except KeyError:
@@ -59,12 +69,19 @@ class AnnotatedDataset(JSONDataset):
         return {"description": self.description, "dataset": dataset}
 
     @classmethod
-    def from_dict(cls, dict_in):
+    def parse_annotation(cls, annotation_json_obj):
+        """Process raw annotation object. For overwriting in child classes"""
+        return annotation_json_obj
+
+    @classmethod
+    def from_json_dict(cls, dict_in):
         dataset_dict = dict_in["dataset"]
         annotations = {}
         for tag, element_dict in dataset_dict.items():
             if element_dict.get(cls.json_keyword):
-                annotations[Tag(tag)] = element_dict.get(cls.json_keyword)
+                annotations[Tag(tag)] = cls.parse_annotation(
+                    element_dict.get(cls.json_keyword)
+                )
             del element_dict[cls.json_keyword]
             del element_dict[cls.json_tag_name_keyword]
 
