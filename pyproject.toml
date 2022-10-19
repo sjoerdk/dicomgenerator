@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dicomgenerator"
-version = "0.8.1"
+version = "0.8.2"
 description = "Generate pydicom datasets and data elements for use in testing"
 authors = ["sjoerdk <sjoerd.kerkstra@radboudumc.nl>"]
 readme = "README.md"
