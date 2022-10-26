@@ -15,6 +15,22 @@ class VR:
         return f'VR "{self.long_name}" ({self.short_name})'
 
 
+class StringLikeVR(VR):
+    pass
+
+
+class DateLikeVR(VR):
+    pass
+
+
+class NumericVR(VR):
+    pass
+
+
+class BytesLikeVR(VR):
+    pass
+
+
 class VRs:
     """All value representations listed here:
 
@@ -24,31 +40,33 @@ class VRs:
     ApplicationEntity = VR(short_name="AE", long_name="Application Entity")
     AgeString = VR(short_name="AS", long_name="Age String")
     AttributeTag = VR(short_name="AT", long_name="Attribute Tag")
-    CodeString = VR(short_name="CS", long_name="Code String")
-    Date = VR(short_name="DA", long_name="Date")
-    DecimalString = VR(short_name="DS", long_name="Decimal String")
-    DateTime = VR(short_name="DT", long_name="Date Time")
-    FloatingPointSingle = VR(short_name="FL", long_name="Floating Point Single")
-    FloatingPointDouble = VR(short_name="FD", long_name="Floating Point Double")
-    IntegerString = VR(short_name="IS", long_name="Integer String")
-    LongString = VR(short_name="LO", long_name="Long String")
-    LongText = VR(short_name="LT", long_name="Long Text")
-    OtherByteString = VR(short_name="OB", long_name="Other Byte String")
-    OtherDoubleString = VR(short_name="OD", long_name="Other Double String")
-    OtherFloatString = VR(short_name="OF", long_name="Other Float String")
-    OtherWordString = VR(short_name="OW", long_name="Other Word String")
-    PersonName = VR(short_name="PN", long_name="Person Name")
-    ShortString = VR(short_name="SH", long_name="Short String")
-    SignedLong = VR(short_name="SL", long_name="Signed Long")
+    CodeString = StringLikeVR(short_name="CS", long_name="Code String")
+    Date = DateLikeVR(short_name="DA", long_name="Date")
+    DecimalString = NumericVR(short_name="DS", long_name="Decimal String")
+    DateTime = DateLikeVR(short_name="DT", long_name="Date Time")
+    FloatingPointSingle = NumericVR(short_name="FL", long_name="Floating Point Single")
+    FloatingPointDouble = NumericVR(short_name="FD", long_name="Floating Point Double")
+    IntegerString = NumericVR(short_name="IS", long_name="Integer String")
+    LongString = StringLikeVR(short_name="LO", long_name="Long String")
+    LongText = StringLikeVR(short_name="LT", long_name="Long Text")
+    OtherByteString = BytesLikeVR(short_name="OB", long_name="Other Byte String")
+    OtherDoubleString = NumericVR(short_name="OD", long_name="Other Double String")
+    OtherFloatString = NumericVR(short_name="OF", long_name="Other Float String")
+    OtherWordString = BytesLikeVR(short_name="OW", long_name="Other Word String")
+    PersonName = StringLikeVR(short_name="PN", long_name="Person Name")
+    ShortString = StringLikeVR(short_name="SH", long_name="Short String")
+    SignedLong = NumericVR(short_name="SL", long_name="Signed Long")
     Sequence = VR(short_name="SQ", long_name="Sequence of Items")
-    SignedShort = VR(short_name="SS", long_name="Signed Short")
-    ShortText = VR(short_name="ST", long_name="Short Text")
-    Time = VR(short_name="TM", long_name="Time")
-    UniqueIdentifier = VR(short_name="UI", long_name="Unique Identifier (UID)")
-    UnsignedLong = VR(short_name="UL", long_name="Unsigned Long")
+    SignedShort = NumericVR(short_name="SS", long_name="Signed Short")
+    ShortText = StringLikeVR(short_name="ST", long_name="Short Text")
+    Time = DateLikeVR(short_name="TM", long_name="Time")
+    UniqueIdentifier = StringLikeVR(
+        short_name="UI", long_name="Unique Identifier (UID)"
+    )
+    UnsignedLong = NumericVR(short_name="UL", long_name="Unsigned Long")
     Unknown = VR(short_name="UN", long_name="Unknown")
-    UnsignedShort = VR(short_name="US", long_name="Unsigned Short")
-    UnlimitedText = VR(short_name="UT", long_name="Unlimited Text")
+    UnsignedShort = NumericVR(short_name="US", long_name="Unsigned Short")
+    UnlimitedText = StringLikeVR(short_name="UT", long_name="Unlimited Text")
 
     all = [
         ApplicationEntity,
@@ -83,35 +101,6 @@ class VRs:
 
     by_short_name = {x.short_name: x for x in all}
 
-    # VRs which could reasonably have random string contents
-    string_like = [
-        LongString,
-        LongText,
-        PersonName,
-        ShortString,
-        ShortText,
-        UniqueIdentifier,
-        UnlimitedText,
-        CodeString,
-    ]
-
-    # VRs which represent numbers
-    numeric = [
-        DecimalString,
-        FloatingPointDouble,
-        FloatingPointDouble,
-        IntegerString,
-        OtherDoubleString,
-        OtherFloatString,
-        SignedLong,
-        SignedShort,
-        UnsignedShort,
-        UnsignedLong,
-    ]
-
-    # VRs which represent dates and times
-    date_like = [Date, DateTime, Time]
-
     @classmethod
     def short_name_to_vr(cls, short_name) -> VR:
         """Find a VR with the given short name
@@ -125,3 +114,28 @@ class VRs:
             return cls.by_short_name[short_name]
         except KeyError as e:
             raise ValueError(f"Unknown VR '{short_name}'") from e
+
+    @classmethod
+    def is_date_like(cls, vr: str) -> bool:
+        """Is the given VR like a date or time?"""
+        return isinstance(cls.short_name_to_vr(vr), DateLikeVR)
+
+    @classmethod
+    def is_string_like(cls, vr: str) -> bool:
+        """Is the given VR like a string?"""
+        return isinstance(cls.short_name_to_vr(vr), StringLikeVR)
+
+    @classmethod
+    def is_numeric(cls, vr: str) -> bool:
+        """Is the given VR like a number?"""
+        return isinstance(cls.short_name_to_vr(vr), NumericVR)
+
+    @classmethod
+    def is_bytes_like(cls, vr: str) -> bool:
+        """Is the given VR like a number?"""
+        return isinstance(cls.short_name_to_vr(vr), BytesLikeVR)
+
+    @classmethod
+    def is_sequence(cls, vr: str) -> bool:
+        """Is the given VR a sequence of elements?"""
+        return bool(vr == cls.Sequence.short_name)

@@ -1,6 +1,7 @@
 import pytest
 from dicomgenerator.annotation import AnnotatedDataset
 from dicomgenerator.generators import quick_dataset
+
 from dicomgenerator.tools import to_annotated_dataset
 
 

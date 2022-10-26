@@ -1,6 +1,7 @@
 """Functions and classes for reading, writing and editing datasets"""
 import json
 from pathlib import Path
+from typing import Type
 
 import pydicom
 from pydicom.dataset import Dataset
@@ -49,36 +50,58 @@ class JSONDataset(JSONSerializable):
         return self.dataset.to_json_dict()
 
 
-class FromDicomFileMixin(JSONDataset):
-    """Links JSONSerializable to file on disk
+class FileJSONDataset:
+    """JSONSerializable linked to a dicom file on disk
 
     Makes conversion (DICOM -> JSON) cleaner:
     * read/parse from dicom file on disk
     * save to json file next to input file by default
 
-    Keeping these separate to add to child classes if needed but
-    not clutter the main class with often-unneeded IO stuff
+    Keeping these separate to not clutter the main class with often-unneeded
+    IO stuff
+
     """
 
-    source_file_path: Path
+    # The type of JSONDataset to load and save. Change this for loading child classes
+    json_dataset_class: Type[JSONDataset] = JSONDataset
+
+    def __init__(self, json_dataset: JSONDataset, dicom_file_path: Path):
+        self.json_dataset = json_dataset
+        self.dicom_file_path = dicom_file_path
+
+    @property
+    def dataset(self):
+        return self.json_dataset.dataset
+
+    @dataset.setter
+    def dataset(self, value):
+        self.json_dataset.dataset = value
 
     @classmethod
-    def from_dicom_path(cls, source_file_path: Path):
-        """Init from DICOM file on disk"""
+    def from_dicom_path(cls, source_file_path):
+        """Init from DICOM file on disk
 
-        logger.info(f"Reading DICOM dataset from '{source_file_path}'")
-        klass = cls(dataset=pydicom.dcmread(source_file_path))
-        klass.source_file_path = source_file_path
-        return klass
+        Parameters
+        ----------
+        source_file_path: Path
+            Load from this path
+        """
+        logger.info(
+            f"Reading {cls.json_dataset_class.__name__} from " f"'{source_file_path}'"
+        )
+        return cls(
+            json_dataset=cls.json_dataset_class(pydicom.dcmread(source_file_path)),
+            dicom_file_path=source_file_path,
+        )
 
     def save_to_path(self, save_path=None):
         """Save to disk. Next to input file by default"""
         if save_path:
             save_path = Path(save_path)
         else:
-            source = Path(self.source_file_path)
+            source = Path(self.dicom_file_path)
             save_path = source.parent / (source.stem + "_template.json")
         with open(save_path, "w") as f:
-            self.save(f)
+            self.json_dataset.save(f)
         logger.info(f"Wrote {self} to '{save_path}'")
         return save_path

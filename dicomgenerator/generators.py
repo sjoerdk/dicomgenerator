@@ -96,16 +96,20 @@ class DICOMVRProvider(BaseProvider):
     locale = "nl_NL"
 
     def dicom_person_name(self):
-        """Something like 'Doe^Jane' or 'Vries^Sep de' (VR = PN)
+        """Something like 'DoeFake^Jane' or 'VriesFake^Sep de' (VR = PN)
+
+        Prepending 'Fake' to make fake names easily recognisable. This avoids
+        situations in which real names are mistaken for fake names.
 
         Returns
         -------
         str
         """
         faker = Faker(locale=self.locale)
-        return f"{faker.last_name()}^{faker.first_name()}"
+        return f"{faker.last_name()}Test^{faker.first_name()}"
 
-    def dicom_time(self):
+    @staticmethod
+    def dicom_time():
         """Dicom time string. Like 14350204.123 (VR = TM)
 
         Returns
@@ -122,7 +126,8 @@ class DICOMVRProvider(BaseProvider):
             + str(factory.random.randgen.randint(100, 999))
         )
 
-    def dicom_date(self):
+    @staticmethod
+    def dicom_date():
         """Dicom date string. Like 20120425 (VR = DA)
 
         Returns
@@ -134,7 +139,8 @@ class DICOMVRProvider(BaseProvider):
         ).fuzz()
         return date.strftime("%Y%m%d")
 
-    def dicom_ui(self):
+    @staticmethod
+    def dicom_ui():
         """Generate Valid DICOM UID (VR = UI)
 
         Uses factory boy random seed, so setting seed in test yields the same
@@ -210,7 +216,7 @@ class DataElementFactory(factory.Factory):
         elif vr == VRs.AttributeTag:
             return 0x0010, 0x0010
         elif vr == VRs.CodeString:
-            return "MockCodeString"
+            return "MOCK_123_CODE"
         elif vr == VRs.Date:
             return faker.dicom_date()
         elif vr == VRs.DecimalString:
@@ -234,17 +240,17 @@ class DataElementFactory(factory.Factory):
         elif vr == VRs.OtherFloatString:
             return "MockFloatString"
         elif vr == VRs.OtherWordString:
-            return "MockOtherWordString"
+            return b"MockOtherWordString"
         elif vr == VRs.PersonName:
             return faker.dicom_person_name()
         elif vr == VRs.ShortString:
             return "MockShortString"
         elif vr == VRs.SignedLong:
-            return factory.random.randgen.randint(-(2**32), 2**32)
+            return factory.random.randgen.randint(-(2**31), 2**31)
         elif vr == VRs.Sequence:
             return []
         elif vr == VRs.SignedShort:
-            return factory.random.randgen.randint(-(2**16), 2**16)
+            return factory.random.randgen.randint(-(2**15), 2**15)
         elif vr == VRs.ShortText:
             return faker.sentence()
         elif vr == VRs.Time:
@@ -252,11 +258,11 @@ class DataElementFactory(factory.Factory):
         elif vr == VRs.UniqueIdentifier:
             return faker.dicom_ui()
         elif vr == VRs.UnsignedLong:
-            return factory.random.randgen.randint(0, 2**32)
+            return factory.random.randgen.randint(0, 2**31)
         elif vr == VRs.Unknown:
             return "MockUnknown"
         elif vr == VRs.UnsignedShort:
-            return factory.random.randgen.randint(0, 2**16)
+            return factory.random.randgen.randint(0, 2**15)
         elif vr == VRs.UnlimitedText:
             return faker.text()
         else:

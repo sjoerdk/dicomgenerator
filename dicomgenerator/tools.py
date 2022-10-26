@@ -70,7 +70,9 @@ def replace_pixel_data(dataset, image_path=None):
     Parameters
     ----------
     dataset: pydicom.dataset.Dataset
-    image_path: pathlike to rgb image readable with pillow, optional
+        Replace pixel data in this dataset, if pixeldata exists
+    image_path:
+        pathlike to rgb image readable with pillow, optional
 
     Returns
     -------
@@ -81,6 +83,9 @@ def replace_pixel_data(dataset, image_path=None):
     -----
     TODO: This rescales image values to be CT-like (-2048 to 1000). Make selectable
     """
+    if "PixelData" not in dataset:
+        return dataset  # No pixeldata, nothing needs to be done
+
     if not image_path:
         image_path = RESOURCE_PATH / "skeleton_tiny.jpg"
 
@@ -96,7 +101,7 @@ def replace_pixel_data(dataset, image_path=None):
     pix_np = rescale(pix_np, min_val=-2048, max_val=1000)  # make values CT-like
     dataset.PixelData = pix_np.astype(
         np.int16
-    ).tostring()  # Not sure whether this can be other than int16.
+    ).tobytes()  # Not sure whether this can be other than int16.
     dataset.Rows, dataset.Columns = pix_np.shape
     return dataset
 

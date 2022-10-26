@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from dicomgenerator.exporter import export
+from dicomgenerator.export import export
 from dicomgenerator.templates import CTDatasetFactory
 
 """Generate some CT-like DICOM files """

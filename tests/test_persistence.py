@@ -1,10 +1,13 @@
 from io import StringIO
 
-from dicomgenerator.persistence import JSONDataset
+import pydicom
+
 from dicomgenerator.annotation import AnnotatedDataset
+from dicomgenerator.export import export
+from dicomgenerator.persistence import FileJSONDataset, JSONDataset
 
 
-def test_editable_dataset_save_load(a_dataset):
+def test_json_dataset_save_load(a_dataset):
     """Save and then load again"""
     file = StringIO()
     ds = JSONDataset(dataset=a_dataset)
@@ -44,3 +47,20 @@ def test_annotated_dataset(a_dataset):
     assert loaded.description == "test description"
     for element in ad.dataset:
         assert element == loaded.dataset[element.tag]
+
+
+def test_annotate(a_dataset_path):
+    """Does reading from dicom, saving to example,
+    exporting to dicom change things?
+    """
+    root = a_dataset_path.parent
+    original_path = a_dataset_path
+
+    saved = root / "saved_dicom"
+    export(FileJSONDataset.from_dicom_path(original_path).dataset, path=saved)
+
+    original = pydicom.dcmread(original_path)
+    reloaded = FileJSONDataset.from_dicom_path(saved).dataset
+
+    for element in original:
+        assert reloaded[element.tag] == element
