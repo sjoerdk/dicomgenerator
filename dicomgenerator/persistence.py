@@ -8,6 +8,7 @@ from pydicom.dataset import Dataset
 
 from dicomgenerator import logging
 
+
 logger = logging.get_module_logger("annotation")
 
 
@@ -59,7 +60,6 @@ class FileJSONDataset:
 
     Keeping these separate to not clutter the main class with often-unneeded
     IO stuff
-
     """
 
     # The type of JSONDataset to load and save. Change this for loading child classes
@@ -94,6 +94,8 @@ class FileJSONDataset:
             dicom_file_path=source_file_path,
         )
 
+    source_file_path: Path
+
     def save_to_path(self, save_path=None):
         """Save to disk. Next to input file by default"""
         if save_path:
@@ -103,5 +105,6 @@ class FileJSONDataset:
             save_path = source.parent / (source.stem + "_template.json")
         with open(save_path, "w") as f:
             self.json_dataset.save(f)
+
         logger.info(f"Wrote {self} to '{save_path}'")
         return save_path
