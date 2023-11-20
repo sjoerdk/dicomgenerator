@@ -12,8 +12,8 @@ repos:
     hooks:
       - id: black
         language: python
-  - repo: https://gitlab.com/pycqa/flake8
-    rev: 4.0.1
+  - repo: https://github.com/PyCQA/flake8
+    rev: 5.0.4
     hooks:
       - id: flake8
         exclude: dicomtrolley/xml_templates.py
@@ -29,6 +29,6 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies:
-          - pydantic
+          - mypy
           - types-requests
           - types-Jinja2
