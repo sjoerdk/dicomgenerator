@@ -9,8 +9,8 @@ repository = "https://github.com/sjoerdk/dicomgenerator"
 include = ["dicomgenerator/resources"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
-pydicom = "^2.3.0"
+python = ">=3.10,<3.11"
+pydicom = "3.0.1"
 numpy = "^1.23.4"
 factory-boy = "^3.2.1"
 click = "^8.1.3"
