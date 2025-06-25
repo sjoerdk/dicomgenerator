@@ -212,7 +212,7 @@ class DataElementFactory(factory.Factory):
         if vr == VRs.ApplicationEntity:
             return "MockEntity"
         elif vr == VRs.AgeString:
-            return f"{factory.random.randgen.randint(0,120):03d}Y"
+            return f"{factory.random.randgen.randint(0, 120): 03d}Y"
         elif vr == VRs.AttributeTag:
             return 0x0010, 0x0010
         elif vr == VRs.CodeString:
@@ -228,7 +228,7 @@ class DataElementFactory(factory.Factory):
         elif vr == VRs.FloatingPointDouble:
             return 1.123
         elif vr == VRs.IntegerString:
-            return f"{factory.random.randgen.randint(-2**31,2**31)}"
+            return f"{factory.random.randgen.randint(-2**31, 2**31)}"
         elif vr == VRs.LongString:
             return faker.sentence()[:64]
         elif vr == VRs.LongText:
