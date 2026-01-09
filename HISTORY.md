@@ -1,4 +1,8 @@
 # History
+## 0.9.1 (2025-06-25)
+* Moves to python 3.12
+* Updates dependencies
+  
 ## 0.8.2 (2022-10-19) - Explicit JSONSerializable
 * Adds JSONSerializable class for more explicit inheritance, improves CLI
 * Adds mixin for dicom -> json dataset conversion
