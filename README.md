@@ -44,7 +44,7 @@ I have found this quite useful in testing:
 Generate a realistic CT dataset
 
 ```python 
-    from dicomgenerator.factory import CTDatasetFactory
+    from dicomgenerator.templates import CTDatasetFactory
 
     # Generate from template
     >>> CTDatasetFactory().PatientName -> 'van Haarlem^Anouk'  #  generated random name
@@ -66,7 +66,7 @@ Generate a realistic CT dataset
 
 ```python
     # import
-    from dicomgenerator.factory import DataElementFactory
+    from dicomgenerator.templates import DataElementFactory
 
     # Creating a DICOM data element by name will give a realistic value and correct VR
     >>> DataElementFactory(tag='PatientName').value -> "van Ooyen^Fiene"
