@@ -71,7 +71,7 @@ class DatasetFactory(factory.Factory):
     @classmethod
     def _create(cls, model_class, *args, template_path, **kwargs):
         """Instead of creating a clean instance, will load pydicom Dataset
-        instance from template, then overwrite loaded values with any kwargs
+        instance from template, then overwrite loaded pixel_array with any kwargs
 
         """
         obj = model_class.from_json(
@@ -86,7 +86,7 @@ class DatasetFactory(factory.Factory):
 
 
 class DICOMVRProvider(BaseProvider):
-    """Generates valid values for several DICOM Value representations (VR)
+    """Generates valid pixel_array for several DICOM Value representations (VR)
 
     see
     http://dicom.nema.org/dicom/2013/output/chtml/part05/sect_6.2.html
@@ -164,12 +164,12 @@ factory.Faker.add_provider(DICOMVRProvider)
 class DataElementFactory(factory.Factory):
     """Generates pydicom DataElements.
 
-    Will always match VR and random value to given values
+    Will always match VR and random value to given pixel_array
 
     >>> DataElementFactory(tag='PatientName').VR = 'PN'
     >>> DataElementFactory(tag='PatientName').value = 'JONES^Sarah'
 
-    You can still set custom values as well:
+    You can still set custom pixel_array as well:
     >>> DataElementFactory(tag='PatientName', value='123').value = '123'
 
     Notes

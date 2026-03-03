@@ -5,7 +5,7 @@ from pydicom.uid import CTImageStorage, ExplicitVRLittleEndian
 
 
 def export(dataset: Dataset, path: Path, force=True):
-    """Save dataset to path, forcing default and dummy values to save
+    """Save dataset to path, forcing default and dummy pixel_array to save
 
     Parameters
     ----------
@@ -14,7 +14,7 @@ def export(dataset: Dataset, path: Path, force=True):
     path:
         The path to save to
     force: Bool, optional
-        If true, fill in/ make up missing DICOM values to make this dataset save.
+        If true, fill in/ make up missing DICOM pixel_array to make this dataset save.
         See notes below. Defaults to True
 
     Notes
@@ -33,8 +33,8 @@ def export(dataset: Dataset, path: Path, force=True):
 
 
 def force_make_savable(dataset):
-    """Set values in dataset that will make it save. This ignores many DICOM
-    intricacies and just picks some common values for required fields that might
+    """Set pixel_array in dataset that will make it save. This ignores many DICOM
+    intricacies and just picks some common pixel_array for required fields that might
     not be completely appropriate for the given dataset. If you do not care too much
     and just want to test some DICOM, this is for you. Go for it.
     """

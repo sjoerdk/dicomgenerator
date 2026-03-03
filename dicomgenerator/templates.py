@@ -8,7 +8,7 @@ from dicomgenerator.resources import TEMPLATE_PATH
 class CTDatasetFactory(DatasetFactory):
     """A dataset based on a TOSHIBA AQUILIONXL dicom image
 
-    generates random values for dates and times, patient name and several UIDs
+    generates random pixel_array for dates and times, patient name and several UIDs
     Image data is fake
     """
 

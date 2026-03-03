@@ -19,7 +19,7 @@ class AnnotatedDataset(JSONDataset):
         Can be persisted to disk in a human-readable and editable way. Leverages
         pydicom's Dataset.to_json() method, but adds annotation field
         and tag name field for easier reading of the tag (pydicom only persists
-        tag values like '00100010').
+        tag pixel_array like '00100010').
 
         Parameters
         ----------

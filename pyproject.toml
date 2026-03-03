@@ -1,45 +1,43 @@
-[tool.poetry]
+[project]
 name = "dicomgenerator"
 version = "0.9.1"
 description = "Generate pydicom datasets and data elements for use in testing"
-authors = ["sjoerdk <sjoerd.kerkstra@radboudumc.nl>"]
+authors = [{ name = "sjoerdk", email = "sjoerd.kerkstra@radboudumc.nl" }]
+requires-python = ">=3.12,<4"
 readme = "README.md"
 license = "MIT"
-repository = "https://github.com/sjoerdk/dicomgenerator"
-include = ["dicomgenerator/resources"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "pydicom>=3.0.1,<4",
+    "numpy>=2.3.1,<3",
+    "factory-boy>=3.2.1,<4",
+    "click>=8.1.7,<9",
+    "pillow>=11.2.1,<12",
+]
 
-[tool.poetry.dependencies]
-python = "^3.12"
-pydicom = "^3.0.1"
-numpy = "^2.3.1"
-factory-boy = "^3.2.1"
-click = "^8.1.7"
-pillow = "^11.2.1"
+[project.urls]
+Repository = "https://github.com/sjoerdk/dicomgenerator"
 
-[tool.poetry.scripts]
-dicomgen = "dicomgenerator.cli:main"
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.2.2"
-pytest-cov = "^6.2.1"
+[dependency-groups]
+dev = [
+    "matplotlib>=3.10.8",
+    "pytest>=8.2.2,<9",
+    "pytest-cov>=6.2.1,<7",
+]
+
+[tool.uv]
+
+[tool.uv.build-backend]
+module-root = ""
+source-include = ["dicomgenerator/resources/**"]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.9.26,<0.10.0"]
+build-backend = "uv_build"
 
-[tool.tox]
-legacy_tox_ini = """
-[tox]
-isolated_build = True
-envlist = py312
-[gh-actions]
-python =
-    3.12: py312
-
-[testenv]
-allowlist_externals =
-    poetry
-commands =
-    poetry install -v
-    poetry run pytest --cov=tests/ --cov=dicomtrolley
-"""
