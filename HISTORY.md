@@ -1,4 +1,9 @@
 # History
+
+## 0.10.0 (2026-03-10)
+* Moves uv package managent. Drops poetry.
+* Adds limited pixeldata generation, noise and square areas
+
 ## 0.9.1 (2025-06-25)
 * Moves to python 3.12
 * Updates dependencies
