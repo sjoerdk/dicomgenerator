@@ -6,10 +6,8 @@ from dicomgenerator.generators import quick_dataset
 from dicomgenerator.pixeldata import Block, add_blocks, draw_noise, add_pixel_data_2d
 
 
-# A 2D block region, upper left corner pixel location + extent
-
-
-def write_pixel_dataset():
+def write_pixel_datasets():
+    """Shows writing of random pixel data and square areas"""
     ds = quick_dataset(PatientID="TestPatient", Modality="CT")
     pixel_values = draw_noise(201, 301, "uint8")
 
@@ -24,4 +22,5 @@ def write_pixel_dataset():
     plt.show()
 
 
-write_pixel_dataset()
+if __name__ == "__main__":
+    write_pixel_datasets()
