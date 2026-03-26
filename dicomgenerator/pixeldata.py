@@ -207,8 +207,8 @@ def add_blocks(dataset: Dataset, blocks: Iterable[Block], value=0) -> Dataset:
     for block in blocks:
         check_bounds(block, pixel_array)
         pixel_array[
-            block.origin_x : block.origin_x + block.height,
-            block.origin_y : block.origin_y + block.width,
+            block.origin_y : block.origin_y + block.height,
+            block.origin_x : block.origin_x + block.width,
         ] = value
     dataset.PixelData = pixel_array.tobytes()
 
