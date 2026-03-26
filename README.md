@@ -1,7 +1,7 @@
 # dicomgenerator
 
 
-[![CI](https://github.com/sjoerdk/dicomgenerator/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/sjoerdk/dicomgenerator/actions/workflows/build.yml?query=branch%3Amaster)
+[![CI](https://github.com/sjoerdk/dicomgenerator/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/sjoerdk/dicomgenerator/actions/workflows/build.yml?query=branch%3Amain)
 [![PyPI](https://img.shields.io/pypi/v/dicomgenerator)](https://pypi.org/project/dicomgenerator/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/dicomgenerator)](https://pypi.org/project/dicomgenerator/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
