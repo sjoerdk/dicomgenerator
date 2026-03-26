@@ -1,6 +1,6 @@
 [project]
 name = "dicomgenerator"
-version = "0.10.0"
+version = "0.10.1"
 description = "Generate pydicom datasets and data elements for use in testing"
 authors = [{ name = "sjoerdk", email = "sjoerd.kerkstra@radboudumc.nl" }]
 requires-python = ">=3.12,<4"
