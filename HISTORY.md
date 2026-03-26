@@ -1,5 +1,8 @@
 # History
 
+## 0.10.1 (2026-03-26)
+* Bugfix. Switches x and y in add_blocks()
+
 ## 0.10.0 (2026-03-10)
 * Moves uv package managent. Drops poetry.
 * Adds limited pixeldata generation, noise and square areas
