@@ -88,23 +88,6 @@ def generate_image(width=128, height=128):
     return image
 
 
-def add_pixel_data_2d_old(dataset: Dataset, im: Image):
-    """Write image into pixel data. Set rows and columns"""
-
-    pixel_values = list(im.getdata())
-    # convert image into numpy ndarray. use only R channel from RGB as this is
-    # a greyscale image
-    pix_np = np.array([x for x in pixel_values])
-    w, h = im.size  # Set dimensions
-    pix_np.shape = (h, w)
-    pix_np = rescale(pix_np, min_val=-2048, max_val=1000)  # make pixel_array CT-like
-    dataset.PixelData = pix_np.astype(
-        np.int16
-    ).tobytes()  # Not sure whether this can be other than int16.
-    dataset.Rows, dataset.Columns = pix_np.shape
-    return dataset
-
-
 def add_pixel_data_2d(dataset: Dataset, pixel_array: np.ndarray, dtype: str):
     """Write image into pixel data. Set rows and columns
 
