@@ -1,7 +1,8 @@
 """Classes and functions for working with Dataset pixeldata"""
+import hashlib
 from dataclasses import dataclass
 from enum import Enum
-from typing import Iterable, Tuple
+from typing import Iterable, Optional, Tuple
 
 import numpy as np
 from PIL import Image
@@ -105,6 +106,13 @@ def generate_image(width=128, height=128):
     return image
 
 
+def effect_noise_seeded(width, height, sigma, seed=None):
+    rng = np.random.default_rng(seed)
+    noise = rng.normal(loc=128, scale=sigma, size=(height, width))
+    noise = np.clip(noise, 0, 255).astype(np.uint8)
+    return Image.fromarray(noise, mode="L")
+
+
 def add_pixel_data_2d(dataset: Dataset, pixel_array: np.ndarray, dtype: str):
     """Write image into pixel data. Set rows and columns
 
@@ -140,7 +148,14 @@ def add_pixel_data_2d(dataset: Dataset, pixel_array: np.ndarray, dtype: str):
     return ds
 
 
-def draw_noise(height: int, width: int, dtype: str, seed: str = "") -> np.ndarray:
+def md5_int(string_in):
+    """Consistent int for any string"""
+    return int(hashlib.md5(string_in.encode()).hexdigest(), 16)
+
+
+def draw_noise(
+    height: int, width: int, dtype: str, seed: Optional[str] = None
+) -> np.ndarray:
     """Return an array containing random values between 0 and maximum for the given
     datatype.
 
@@ -162,8 +177,11 @@ def draw_noise(height: int, width: int, dtype: str, seed: str = "") -> np.ndarra
 
     """
     max_value = np.iinfo(dtype).max
-
-    arr = random((height, width))
+    if seed:
+        rng = np.random.default_rng(md5_int(seed))
+        arr = rng.random((height, width))
+    else:
+        arr = random((height, width))
 
     # Convert to the required `dtype` and set the maximum `value`
     arr = arr * max_value

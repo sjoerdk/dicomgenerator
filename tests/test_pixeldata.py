@@ -100,3 +100,6 @@ def test_pixel_data_noise_seed():
 
     assert np.all(noise1 == noise2)
     assert not np.all(noise1 == noise3)
+
+    # when not using a seed the noise should be different each time
+    assert not np.all(draw_noise(201, 301, "uint8") == draw_noise(201, 301, "uint8"))
