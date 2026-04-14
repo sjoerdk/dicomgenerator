@@ -1,9 +1,9 @@
 # History
 
-## 0.11.1 (2026-04-14)
+## 0.12.0 (2026-04-14)
 * Adds random seed handling to pixel noise generator
  
-## 0.11.1 (2026-04-14)
+## 0.11.0 (2026-04-14)
 * Adds limited PixelData handling to quick_dataset
  
 ## 0.10.1 (2026-03-26)
