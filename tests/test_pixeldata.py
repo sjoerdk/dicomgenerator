@@ -69,3 +69,20 @@ def test_write_blocks_exceptions():
 
     with pytest.raises(ValueError):
         add_blocks(ds, [Block(10, 20, 500, 50)], value=0)
+
+
+def test_write_pixel_in_quick_dataset():
+    """It would be quite useful to be able to write pixeldata straight into a
+    quick dataset. Try that here
+    """
+    # create a test file with noise
+    pixel_values = draw_noise(201, 301, "uint8")
+    ds = quick_dataset(PatientID="TestPatient", Modality="CT", PixelData=pixel_values)
+
+    # not sure how to test this properly. Currently, 'Does not crash' is the low bar.
+    assert ds.PixelData
+
+    # for debug, use this:
+    # import matplotlib.pyplot as plt
+    # plt.imshow(ds.pixel_array)
+    # plt.show()

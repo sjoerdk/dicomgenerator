@@ -1,5 +1,6 @@
 """Classes and functions for working with Dataset pixeldata"""
 from dataclasses import dataclass
+from enum import Enum
 from typing import Iterable, Tuple
 
 import numpy as np
@@ -12,6 +13,22 @@ from dicomgenerator.logging import get_module_logger
 from dicomgenerator.resources import RESOURCE_PATH
 
 logger = get_module_logger("pixeldata")
+
+
+class PhotoMetricInterpretation(Enum):
+    """Valid values for (0028,0004) Photometric Interpretation
+
+    Needed for https://pydicom.github.io/pydicom/stable/reference/
+    generated/pydicom.pixels.set_pixel_data.html
+    Apparently pydicom does not encode this? Encoding here for now then.
+    """
+
+    MONOCHROME1 = "MONOCHROME1"
+    MONOCHROME2 = "MONOCHROME2"
+    PALETTE_COLOR = "PALETTE COLOR"
+    RGB = "RGB"
+    YBR_FULL = "YBR_FULL"
+    YBR_FULL_422 = "YBR_FULL_422"
 
 
 def replace_pixel_data(dataset, image_path=None):
@@ -108,7 +125,7 @@ def add_pixel_data_2d(dataset: Dataset, pixel_array: np.ndarray, dtype: str):
     ds.PixelRepresentation = 0
 
     ds.SamplesPerPixel = 1
-    ds.PhotometricInterpretation = "MONOCHROME2"
+    ds.PhotometricInterpretation = PhotoMetricInterpretation.MONOCHROME2.value
 
     ds.PixelData = pixel_array.tobytes()
     ds["PixelData"].VR = "OB"

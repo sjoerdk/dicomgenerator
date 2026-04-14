@@ -4,6 +4,7 @@ import datetime
 import factory
 import json
 import pydicom
+from numpy import ndarray
 
 from pydicom.datadict import dictionary_VR
 from pydicom.dataset import Dataset
@@ -11,6 +12,7 @@ from pydicom.tag import Tag
 
 from dicomgenerator.dicom import VRs
 from dicomgenerator.exceptions import DICOMGeneratorError
+from dicomgenerator.pixeldata import PhotoMetricInterpretation
 from dicomgenerator.settings import DICOM_GENERATOR_ROOT_UID
 from factory.fuzzy import FuzzyDate
 from faker.providers import BaseProvider
@@ -20,6 +22,9 @@ from pydicom.uid import generate_uid
 
 def quick_dataset(*_, **kwargs) -> Dataset:
     """A dataset with keyword args as tagname - value pairs
+
+    PixelData should be an ndarray if given.
+    Handles PixelData using `pydicom.pixels.set_pixel_data()`
 
     For example:
     >>> ds = quick_dataset(PatientName='Jane', StudyDescription='Test')
@@ -36,8 +41,24 @@ def quick_dataset(*_, **kwargs) -> Dataset:
     """
     dataset = Dataset()
     for tagname, value in kwargs.items():
-        Tag(tagname)  # assert valid dicom keyword. pydicom will not do this.
-        dataset.__setattr__(tagname, value)
+        if tagname == "PixelData":
+            if not isinstance(value, ndarray):
+                raise ValueError(
+                    f"PixelData value needs to be an "
+                    f"numpy.ndarray, got {type(value)}"
+                )
+
+            dataset.set_pixel_data(
+                value,
+                photometric_interpretation=dataset.get(
+                    "PhotoMetricInterpretation",
+                    PhotoMetricInterpretation.MONOCHROME2.value,
+                ),
+                bits_stored=dataset.get("BitsStored", 8),
+            )
+        else:
+            Tag(tagname)  # assert valid dicom keyword. pydicom will not do this.
+            dataset.__setattr__(tagname, value)
     return dataset
 
 
