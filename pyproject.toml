@@ -1,6 +1,6 @@
 [project]
 name = "dicomgenerator"
-version = "0.10.0"
+version = "0.10.1"
 description = "Generate pydicom datasets and data elements for use in testing"
 authors = [{ name = "sjoerdk", email = "sjoerd.kerkstra@radboudumc.nl" }]
 requires-python = ">=3.12,<4"
@@ -28,7 +28,7 @@ Repository = "https://github.com/sjoerdk/dicomgenerator"
 dev = [
     "matplotlib>=3.10.8",
     "pre-commit>=4.5.1",
-    "pytest>=8.2.2,<9",
+    "pytest>=8.2.2,<10",
     "pytest-cov>=6.2.1,<7",
 ]
 
