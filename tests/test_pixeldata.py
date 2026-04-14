@@ -1,6 +1,7 @@
 from copy import deepcopy
 from io import BytesIO
 
+import numpy as np
 import pytest
 from pydicom import Dataset, dcmread
 
@@ -86,3 +87,16 @@ def test_write_pixel_in_quick_dataset():
     # import matplotlib.pyplot as plt
     # plt.imshow(ds.pixel_array)
     # plt.show()
+
+
+def test_pixel_data_noise_seed():
+    """It's really useful to be able to set a seed for random noise generation so that
+    you can consistently generate the same image
+    """
+
+    noise1 = draw_noise(201, 301, "uint8", seed="image1")
+    noise2 = draw_noise(201, 301, "uint8", seed="image1")
+    noise3 = draw_noise(201, 301, "uint8", seed="image3")
+
+    assert np.all(noise1 == noise2)
+    assert not np.all(noise1 == noise3)

@@ -140,9 +140,26 @@ def add_pixel_data_2d(dataset: Dataset, pixel_array: np.ndarray, dtype: str):
     return ds
 
 
-def draw_noise(height: int, width: int, dtype: str) -> np.ndarray:
+def draw_noise(height: int, width: int, dtype: str, seed: str = "") -> np.ndarray:
     """Return an array containing random values between 0 and maximum for the given
     datatype.
+
+    Parameters
+    ----------
+    height
+    width
+    dtype
+    seed:
+        Optional random seed to use for generation. Two calls to draw_noise with seed
+        and other parameters unchanged should result in identical ndarrays.
+        Defaults to empty string, in which case no seed is set and the resulting noise
+        is random
+
+    Returns
+    -------
+    numpy ndarray
+        a 2-d array
+
     """
     max_value = np.iinfo(dtype).max
 
